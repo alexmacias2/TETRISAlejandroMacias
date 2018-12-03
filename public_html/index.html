@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Tetris</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <script>
+            var juego = {
+                mapa: new Array(),
+                puntuacion: 0,
+                puntuacionMaxima: 0,
+                piezaActual: '',
+                piezaSiguiente: '',
+                intervaloTiempo: 0,
+                nivel: 1,
+                contador: {
+                    I: 0,
+                    J: 0,
+                    L: 0,
+                    O: 0,
+                    S: 0,
+                    T: 0,
+                    Z: 0
+                },
+                cargarMapa: function () {
+                    for (var i = 0; i < 25; i++) {
+                        this.mapa.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+                    }
+                    document.write("Nivel: "+this.nivel+" Puntuación: "
+                            +this.puntuacion+" Puntuación Máxima: "+this.puntuacionMaxima+"<br/>")
+                    for (var i = 0; i < this.mapa.length; i++) {
+                        for (var j = 0; j < this.mapa[i].length; j++) {
+                            document.write(this.mapa[i][j]);
+                        }
+                        document.write("<br/>");
+                    }
+                },
+                iniciarJuego: function () {
+                    
+                },
+                calcularPiezaSiguiente: function () {
+                    
+                },
+                interaccionUsuario: function () {
+                    
+                },
+                movimiento: function () {
+                    
+                }
+            };
+            
+            juego.cargarMapa();
+            
+            
+            
+        </script>
+    </body>
+</html>
+
