@@ -12,7 +12,7 @@ and open the template in the editor.
     </head>
     <body>
         <script>
-            var juego = {
+            var Juego = {
                 mapa: new Array(),
                 puntuacion: 0,
                 puntuacionMaxima: 0,
@@ -20,7 +20,7 @@ and open the template in the editor.
                 piezaSiguiente: '',
                 intervaloTiempo: 0,
                 nivel: 1,
-                contador: {
+                contadorPiezas: {
                     I: 0,
                     J: 0,
                     L: 0,
@@ -33,8 +33,9 @@ and open the template in the editor.
                     for (var i = 0; i < 25; i++) {
                         this.mapa.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
                     }
+                    document.write("<h1>TETRIS</h1>")
                     document.write("Nivel: "+this.nivel+" Puntuación: "
-                            +this.puntuacion+" Puntuación Máxima: "+this.puntuacionMaxima+"<br/>")
+                            +this.puntuacion+" Puntuación Máxima: "+this.puntuacionMaxima+"<br/><br/>")
                     for (var i = 0; i < this.mapa.length; i++) {
                         for (var j = 0; j < this.mapa[i].length; j++) {
                             document.write(this.mapa[i][j]);
@@ -46,6 +47,17 @@ and open the template in the editor.
                     
                 },
                 calcularPiezaSiguiente: function () {
+                    var pieza= Math.floor(Math.random() * (8 - 1) + 1);
+                    switch(pieza){
+                        case 1:pieza=new Pieza([[[0,0,0,1],[0,0,0,1],[0,0,0,1],[0,0,0,1]],['azul']],0);this.contadorPiezas['I']++;break;
+                        case 2:pieza=new Pieza([[0,0,1],[0,0,1],[0,1,1]],['rosa'],0);this.contadorPiezas['J']++;break;
+                        case 3:pieza=new Pieza([[1,0,0],[1,0,0],[1,1,0]],['naranja']);this.contadorPiezas['L']++;break;
+                        case 4:pieza=new Pieza([[[1,1],[1,1]],'amarillo'],0);this.contadorPiezas['O']++;break;
+                        case 5:pieza=new Pieza([[0,0,0],[0,1,1],[1,1,0]],['rojo']);this.contadorPiezas['S']++;break;
+                        case 6:pieza=new Pieza([[0,0,0],[1,1,1],[0,1,0]],['lila']);this.contadorPiezas['T']++;break;
+                        case 7:pieza=new Pieza([[0,0,0],[1,1,0],[0,1,1]],['verde']);this.contadorPiezas['Z']++;break;
+                    }
+                    return pieza;
                     
                 },
                 interaccionUsuario: function () {
@@ -56,7 +68,32 @@ and open the template in the editor.
                 }
             };
             
-            juego.cargarMapa();
+            var Pieza = function(formaYcolor,posicion) {
+                this.formaYcolor=formaYcolor;
+                this.posicion=posicion;
+            };
+            
+            Pieza.prototype.rotarIzquierda=function(){
+                
+            };
+            Pieza.prototype.rotarDerecha=function(){
+                
+            };
+            Pieza.prototype.moverIzquierda=function(){
+                
+            };
+            Pieza.prototype.moverDerecha=function(){
+                
+            };
+            Pieza.prototype.retornarForma=function(){
+                return this.formaYcolor[0];
+            };
+            Juego.cargarMapa();
+            var peça=Juego.calcularPiezaSiguiente();
+            console.log(peça.retornarForma());
+            
+            
+            
             
             
             
