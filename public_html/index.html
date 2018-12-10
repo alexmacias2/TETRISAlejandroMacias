@@ -18,7 +18,7 @@ and open the template in the editor.
                 puntuacionMaxima: 0,
                 piezaActual: '',
                 piezaSiguiente: '',
-                intervaloTiempo: 0,
+                intervaloTiempo: 1000,
                 nivel: 1,
                 contadorPiezas: {
                     I: 0,
@@ -34,8 +34,8 @@ and open the template in the editor.
                         this.mapa.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
                     }
                     document.write("<h1>TETRIS</h1>")
-                    document.write("Nivel: "+this.nivel+" Puntuación: "
-                            +this.puntuacion+" Puntuación Máxima: "+this.puntuacionMaxima+"<br/><br/>")
+                    document.write("Nivel: " + this.nivel + " Puntuación: "
+                            + this.puntuacion + " Puntuación Máxima: " + this.puntuacionMaxima + "<br/><br/>")
                     for (var i = 0; i < this.mapa.length; i++) {
                         for (var j = 0; j < this.mapa[i].length; j++) {
                             document.write(this.mapa[i][j]);
@@ -44,59 +44,100 @@ and open the template in the editor.
                     }
                 },
                 iniciarJuego: function () {
-                    
+
                 },
                 calcularPiezaSiguiente: function () {
-                    var pieza= Math.floor(Math.random() * (8 - 1) + 1);
-                    switch(pieza){
-                        case 1:pieza=new Pieza([[[0,0,0,1],[0,0,0,1],[0,0,0,1],[0,0,0,1]],['azul']],0);this.contadorPiezas['I']++;break;
-                        case 2:pieza=new Pieza([[0,0,1],[0,0,1],[0,1,1]],['rosa'],0);this.contadorPiezas['J']++;break;
-                        case 3:pieza=new Pieza([[1,0,0],[1,0,0],[1,1,0]],['naranja']);this.contadorPiezas['L']++;break;
-                        case 4:pieza=new Pieza([[[1,1],[1,1]],'amarillo'],0);this.contadorPiezas['O']++;break;
-                        case 5:pieza=new Pieza([[0,0,0],[0,1,1],[1,1,0]],['rojo']);this.contadorPiezas['S']++;break;
-                        case 6:pieza=new Pieza([[0,0,0],[1,1,1],[0,1,0]],['lila']);this.contadorPiezas['T']++;break;
-                        case 7:pieza=new Pieza([[0,0,0],[1,1,0],[0,1,1]],['verde']);this.contadorPiezas['Z']++;break;
+                    var pieza = Math.floor(Math.random() * (8 - 1) + 1);
+                    switch (pieza) {
+                        case 1:
+                            pieza = new Pieza([[[0,0,0,0],[0,1,1,0],[0,1,1,0],[0,0,0,0]],"groc"], 3, 21);
+                            this.contadorPiezas['I']++;
+                            break;
+                        case 2:
+                            pieza = new Pieza([[[0,1,0,0],[0,1,0,0],[0,1,0,0],[0,1,0,0]],"lila"], 3, 21);
+                            this.contadorPiezas['J']++;
+                            break;
+                        case 3:
+                            pieza = new Pieza([[[0,0,0,0],[0,1,1,0],[1,1,0,0],[0,0,0,0]],"verd"], 3, 21);
+                            this.contadorPiezas['L']++;
+                            break;
+                        case 4:
+                            pieza = new Pieza( [[[0,0,0,0],[0,1,1,0],[0,0,1,1],[0,0,0,0]],"roig"], 3, 21);
+                            this.contadorPiezas['O']++;
+                            break;
+                        case 5:
+                            pieza = new Pieza([[[0,1,0,0],[0,1,0,0],[0,1,1,0],[0,0,0,0]],"blau"], 3, 21);
+                            this.contadorPiezas['S']++;
+                            break;
+                        case 6:
+                            pieza = new Pieza([[[0,1,1,0],[0,1,0,0],[0,1,0,0],[0,0,0,0]],"taronga"], 3, 21);
+                            this.contadorPiezas['T']++;
+                            break;
+                        case 7:
+                            pieza = new Pieza([[[0,0,0,0],[1,1,1,0],[0,1,0,0],[0,0,0,0]],"morat"], 3, 21);
+                            this.contadorPiezas['Z']++;
+                            break;
                     }
+                    this.piezaActual = pieza;
                     return pieza;
-                    
+
                 },
                 interaccionUsuario: function () {
-                    
+
                 },
                 movimiento: function () {
-                    
+
                 }
             };
-            
-            var Pieza = function(formaYcolor,posicion) {
-                this.formaYcolor=formaYcolor;
-                this.posicion=posicion;
+
+            var Pieza = function (formaYcolor, horizontal, vertical) {
+                this.formaYcolor = formaYcolor;
+                this.horizontal = horizontal;
+                this.vertical = vertical;
             };
-            
-            Pieza.prototype.rotarIzquierda=function(){
+
+            Pieza.prototype.rotarIzquierda = function () {
+                this.rotarDerecha();
+                this.rotarDerecha();
+                this.rotarDerecha();
+            };
+            Pieza.prototype.rotarDerecha = function () {
+                var forma = this.formaYcolor[0];
+                var formaNova = new Array();
+                for (var i = 0; i < forma.length; i++) {
+                    formaNova[i] = new Array();
+                    for (var j = 0; j < forma[i].length; j++) {
+                        formaNova[i][j] = forma[forma[i].length - 1 - j][i];
+                    }
+                }
+                this.formaYcolor[0] = formaNova;
                 
             };
-            Pieza.prototype.rotarDerecha=function(){
-                
+            Pieza.prototype.moverIzquierda = function () {
+                if ((horizontal + 1) < 14) {
+                    horizontal++;
+                    return true;
+                } else {
+                    return false;
+                }
             };
-            Pieza.prototype.moverIzquierda=function(){
-                
+            Pieza.prototype.moverDerecha = function () {
+                if ((horizontal - 1) > 0) {
+                    horizontal--;
+                    return true;
+                } else {
+                    return false;
+                }
             };
-            Pieza.prototype.moverDerecha=function(){
-                
-            };
-            Pieza.prototype.retornarForma=function(){
+            Pieza.prototype.retornarForma = function () {
                 return this.formaYcolor[0];
             };
             Juego.cargarMapa();
-            var peça=Juego.calcularPiezaSiguiente();
+            var peça = Juego.calcularPiezaSiguiente();
             console.log(peça.retornarForma());
-            
-            
-            
-            
-            
-            
+            peça.rotarIzquierda();
+            console.log(peça.retornarForma());
+
         </script>
     </body>
 </html>
