@@ -11,6 +11,17 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
+        <img src="imagenes/blanc.jpg"    id="blanco"    style="display: none;">
+        <img src="imagenes/blau.jpg"       id="azul"       style="display: none;">
+        <img src="imagenes/groc.jpg" id="amarillo" style="display: none;">
+        <img src="imagenes/lila.jpg" id="lila" style="display: none;">
+        <img src="imagenes/rosa.jpg" id="rosa" style="display: none;">
+        <img src="imagenes/taronja.jpg" id="taronja" style="display: none;">
+        <img src="imagenes/verd.jpg" id="naranja" style="display: none;">
+        <img src="imagenes/vermell.jpg" id="rojo" style="display: none;">
+
+        <!-- Espai de dibuix -->
+        <canvas id="espai" width="350" height="600"> </canvas>
         <script>
             var Juego = {
                 mapa: new Array(),
@@ -30,17 +41,23 @@ and open the template in the editor.
                     Z: 0
                 },
                 cargarMapa: function () {
+                    var canvas = document.getElementById("espai");
+                    var ctx = canvas.getContext("2d");
+                    var imagen;
                     for (var i = 0; i < 25; i++) {
                         this.mapa.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
                     }
-                    document.write("<h1>TETRIS</h1>")
-                    document.write("Nivel: " + this.nivel + " Puntuación: "
-                            + this.puntuacion + " Puntuación Máxima: " + this.puntuacionMaxima + "<br/><br/>")
+                    //document.write("<h1>TETRIS</h1>")
+                   // document.write("Nivel: " + this.nivel + " Puntuación: "
+                           // + this.puntuacion + " Puntuación Máxima: " + this.puntuacionMaxima + "<br/><br/>")
                     for (var i = 0; i < this.mapa.length; i++) {
                         for (var j = 0; j < this.mapa[i].length; j++) {
-                            document.write(this.mapa[i][j]);
+                            if (this.mapa[i][j] == 0) {
+                                imagen = document.getElementById("blanco");
+                            }
+                            ctx.drawImage(imagen, j * 21, i * 21, 20, 20);
+                           // document.write("<br/>");
                         }
-                        document.write("<br/>");
                     }
                 },
                 iniciarJuego: function () {
@@ -50,31 +67,31 @@ and open the template in the editor.
                     var pieza = Math.floor(Math.random() * (8 - 1) + 1);
                     switch (pieza) {
                         case 1:
-                            pieza = new Pieza([[[0,0,0,0],[0,1,1,0],[0,1,1,0],[0,0,0,0]],"groc"], 3, 21);
+                            pieza = new Pieza([[[0, 0, 0, 0], [0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 0, 0]], "groc"], 3, 21);
                             this.contadorPiezas['I']++;
                             break;
                         case 2:
-                            pieza = new Pieza([[[0,1,0,0],[0,1,0,0],[0,1,0,0],[0,1,0,0]],"lila"], 3, 21);
+                            pieza = new Pieza([[[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0]], "lila"], 3, 21);
                             this.contadorPiezas['J']++;
                             break;
                         case 3:
-                            pieza = new Pieza([[[0,0,0,0],[0,1,1,0],[1,1,0,0],[0,0,0,0]],"verd"], 3, 21);
+                            pieza = new Pieza([[[0, 0, 0, 0], [0, 1, 1, 0], [1, 1, 0, 0], [0, 0, 0, 0]], "verd"], 3, 21);
                             this.contadorPiezas['L']++;
                             break;
                         case 4:
-                            pieza = new Pieza( [[[0,0,0,0],[0,1,1,0],[0,0,1,1],[0,0,0,0]],"roig"], 3, 21);
+                            pieza = new Pieza([[[0, 0, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0, 0]], "roig"], 3, 21);
                             this.contadorPiezas['O']++;
                             break;
                         case 5:
-                            pieza = new Pieza([[[0,1,0,0],[0,1,0,0],[0,1,1,0],[0,0,0,0]],"blau"], 3, 21);
+                            pieza = new Pieza([[[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 1, 0], [0, 0, 0, 0]], "blau"], 3, 21);
                             this.contadorPiezas['S']++;
                             break;
                         case 6:
-                            pieza = new Pieza([[[0,1,1,0],[0,1,0,0],[0,1,0,0],[0,0,0,0]],"taronga"], 3, 21);
+                            pieza = new Pieza([[[0, 1, 1, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 0, 0, 0]], "taronga"], 3, 21);
                             this.contadorPiezas['T']++;
                             break;
                         case 7:
-                            pieza = new Pieza([[[0,0,0,0],[1,1,1,0],[0,1,0,0],[0,0,0,0]],"morat"], 3, 21);
+                            pieza = new Pieza([[[0, 0, 0, 0], [1, 1, 1, 0], [0, 1, 0, 0], [0, 0, 0, 0]], "morat"], 3, 21);
                             this.contadorPiezas['Z']++;
                             break;
                     }
@@ -111,7 +128,7 @@ and open the template in the editor.
                     }
                 }
                 this.formaYcolor[0] = formaNova;
-                
+
             };
             Pieza.prototype.moverIzquierda = function () {
                 if ((horizontal + 1) < 14) {
@@ -132,11 +149,16 @@ and open the template in the editor.
             Pieza.prototype.retornarForma = function () {
                 return this.formaYcolor[0];
             };
-            Juego.cargarMapa();
-            var peça = Juego.calcularPiezaSiguiente();
-            console.log(peça.retornarForma());
-            peça.rotarIzquierda();
-            console.log(peça.retornarForma());
+
+            window.onload = function () {
+                Juego.cargarMapa();
+                var peça = Juego.calcularPiezaSiguiente();
+                console.log(peça.retornarForma());
+                peça.rotarIzquierda();
+                console.log(peça.retornarForma());
+            }
+
+
 
         </script>
     </body>
