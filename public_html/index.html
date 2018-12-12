@@ -11,6 +11,9 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
+        <p id="titulo"></p>
+        <p id="puntuacion"></p>
+        <p id="puntuacionMax"></p>
         <img src="imagenes/blanc.jpg"    id="blanco"    style="display: none;">
         <img src="imagenes/blau.jpg"       id="azul"       style="display: none;">
         <img src="imagenes/groc.jpg" id="amarillo" style="display: none;">
@@ -48,26 +51,47 @@ and open the template in the editor.
                         this.mapa.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
                     }
                     //document.write("<h1>TETRIS</h1>")
-                   // document.write("Nivel: " + this.nivel + " Puntuación: "
-                           // + this.puntuacion + " Puntuación Máxima: " + this.puntuacionMaxima + "<br/><br/>")
+                    // document.write("Nivel: " + this.nivel + " Puntuación: "
+                    // + this.puntuacion + " Puntuación Máxima: " + this.puntuacionMaxima + "<br/><br/>")
                     for (var i = 0; i < this.mapa.length; i++) {
                         for (var j = 0; j < this.mapa[i].length; j++) {
                             if (this.mapa[i][j] == 0) {
                                 imagen = document.getElementById("blanco");
                             }
+                            if (this.mapa[i][j] == 1) {
+                                imagen = document.getElementById("azul");
+                            }
+                            if (this.mapa[i][j] == 'A') {
+                                imagen = document.getElementById("amarillo");
+                            }
+                            if (this.mapa[i][j] == 'L') {
+                                imagen = document.getElementById("lila");
+                            }
+                            if (this.mapa[i][j] == 0) {
+                                imagen = document.getElementById("blanco");
+                            }
+                            if (this.mapa[i][j] == 0) {
+                                imagen = document.getElementById("blanco");
+                            }
                             ctx.drawImage(imagen, j * 21, i * 21, 20, 20);
-                           // document.write("<br/>");
+                            // document.write("<br/>");
                         }
                     }
                 },
                 iniciarJuego: function () {
-
+                    this.mostrarInfo();
+                    this.cargarMapa();
+                },
+                mostrarInfo: function () {
+                    document.getElementById("titulo").innerHTML = "PACMAN";
+                    document.getElementById("puntuacion").innerHTML = "Puntuación: " + this.puntuacion;
+                    document.getElementById("puntuacionMax").innerHTML = "Puntuación mácima: " + this.puntuacionMaxima;
                 },
                 calcularPiezaSiguiente: function () {
                     var pieza = Math.floor(Math.random() * (8 - 1) + 1);
                     switch (pieza) {
                         case 1:
-                            pieza = new Pieza([[[0, 0, 0, 0], [0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 0, 0]], "groc"], 3, 21);
+                            pieza = new Pieza([[ [0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 0, 0],[0, 0, 0, 0]], "groc"], 3, 21);
                             this.contadorPiezas['I']++;
                             break;
                         case 2:
@@ -75,11 +99,11 @@ and open the template in the editor.
                             this.contadorPiezas['J']++;
                             break;
                         case 3:
-                            pieza = new Pieza([[[0, 0, 0, 0], [0, 1, 1, 0], [1, 1, 0, 0], [0, 0, 0, 0]], "verd"], 3, 21);
+                            pieza = new Pieza([[[0, 1, 1, 0], [1, 1, 0, 0], [0, 0, 0, 0],[0, 0, 0, 0]], "verd"], 3, 21);
                             this.contadorPiezas['L']++;
                             break;
                         case 4:
-                            pieza = new Pieza([[[0, 0, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0, 0]], "roig"], 3, 21);
+                            pieza = new Pieza([[[0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0, 0],[0, 0, 0, 0]], "roig"], 3, 21);
                             this.contadorPiezas['O']++;
                             break;
                         case 5:
@@ -91,13 +115,12 @@ and open the template in the editor.
                             this.contadorPiezas['T']++;
                             break;
                         case 7:
-                            pieza = new Pieza([[[0, 0, 0, 0], [1, 1, 1, 0], [0, 1, 0, 0], [0, 0, 0, 0]], "morat"], 3, 21);
+                            pieza = new Pieza([[[1, 1, 1, 0], [0, 1, 0, 0], [0, 0, 0, 0],[0, 0, 0, 0]], "morat"], 3, 21);
                             this.contadorPiezas['Z']++;
                             break;
                     }
                     this.piezaActual = pieza;
                     return pieza;
-
                 },
                 interaccionUsuario: function () {
 
@@ -106,13 +129,11 @@ and open the template in the editor.
 
                 }
             };
-
             var Pieza = function (formaYcolor, horizontal, vertical) {
                 this.formaYcolor = formaYcolor;
                 this.horizontal = horizontal;
                 this.vertical = vertical;
             };
-
             Pieza.prototype.rotarIzquierda = function () {
                 this.rotarDerecha();
                 this.rotarDerecha();
@@ -128,7 +149,6 @@ and open the template in the editor.
                     }
                 }
                 this.formaYcolor[0] = formaNova;
-
             };
             Pieza.prototype.moverIzquierda = function () {
                 if ((horizontal + 1) < 14) {
@@ -149,13 +169,31 @@ and open the template in the editor.
             Pieza.prototype.retornarForma = function () {
                 return this.formaYcolor[0];
             };
-
+            Pieza.prototype.pintaPieza = function () {
+                var forma = this.formaYcolor[0];
+                var vertical = this.vertical;
+                var horizontal = this.horizontal;
+                var color = this.formaYcolor[1]
+                        for (var i = 0; i < forma.length; i++) {
+                    for (var j = 0; j < forma[i].length; j++) {
+                        if(forma[i][j]==1){
+                            Juego.mapa[vertical+i][horizontal+j]=1;
+                        }
+                    }
+                }
+            };
+            
             window.onload = function () {
-                Juego.cargarMapa();
-                var peça = Juego.calcularPiezaSiguiente();
-                console.log(peça.retornarForma());
-                peça.rotarIzquierda();
-                console.log(peça.retornarForma());
+                Juego.iniciarJuego();
+//                setInterval(function () {
+//                    var pieza = Juego.calcularPiezaSiguiente();
+//                    console.log(pieza);
+//                }, Juego.intervaloTiempo);
+                var pieza = Juego.calcularPiezaSiguiente();
+                pieza.pintaPieza();
+                console.log(Juego.mapa);
+                
+                
             }
 
 
