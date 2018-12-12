@@ -46,10 +46,8 @@ and open the template in the editor.
                 cargarMapa: function () {
                     var canvas = document.getElementById("espai");
                     var ctx = canvas.getContext("2d");
+                    this.mostrarInfo();
                     var imagen;
-                    for (var i = 0; i < 25; i++) {
-                        this.mapa.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-                    }
                     //document.write("<h1>TETRIS</h1>")
                     // document.write("Nivel: " + this.nivel + " Puntuación: "
                     // + this.puntuacion + " Puntuación Máxima: " + this.puntuacionMaxima + "<br/><br/>")
@@ -75,7 +73,7 @@ and open the template in the editor.
                             }
                             if (this.mapa[i][j] == 'V') {
                                 imagen = document.getElementById("verde");
-                            } 
+                            }
                             if (this.mapa[i][j] == 'R') {
                                 imagen = document.getElementById("rojo");
                             }
@@ -84,44 +82,45 @@ and open the template in the editor.
                         }
                     }
                 },
-                iniciarJuego: function () {
-                    this.mostrarInfo();
-                    this.cargarMapa();
+                iniciarMapa: function () {
+                    for (var i = 0; i < 25; i++) {
+                        this.mapa.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+                    }
                 },
                 mostrarInfo: function () {
-                    document.getElementById("titulo").innerHTML = "PACMAN";
+                    document.getElementById("titulo").innerHTML = "<h1>TETRIS</h1>";
                     document.getElementById("puntuacion").innerHTML = "Puntuación: " + this.puntuacion;
-                    document.getElementById("puntuacionMax").innerHTML = "Puntuación mácima: " + this.puntuacionMaxima;
+                    document.getElementById("puntuacionMax").innerHTML = "Puntuación máxima: " + this.puntuacionMaxima;
                 },
                 calcularPiezaSiguiente: function () {
                     var pieza = Math.floor(Math.random() * (8 - 1) + 1);
                     switch (pieza) {
                         case 1:
-                            pieza = new Pieza([[[0, 0, 0, 0], [0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 0, 0]], "amarillo"], 3, 21);
+                            pieza = new Pieza([[[0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 0, 0],[0, 0, 0, 0]], "amarillo"], 3, 0);
                             this.contadorPiezas['I']++;
                             break;
                         case 2:
-                            pieza = new Pieza([[[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0]], "lila"], 3, 21);
+                            pieza = new Pieza([[[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0]], "lila"], 3, 0);
                             this.contadorPiezas['J']++;
                             break;
                         case 3:
-                            pieza = new Pieza([[[0, 0, 0, 0], [0, 1, 1, 0], [1, 1, 0, 0], [0, 0, 0, 0]], "verde"], 3, 21);
+                            pieza = new Pieza([[ [0, 1, 1, 0], [1, 1, 0, 0], [0, 0, 0, 0],[0, 0, 0, 0]], "verde"], 3, 0);
                             this.contadorPiezas['L']++;
                             break;
                         case 4:
-                            pieza = new Pieza([[[0, 0, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0, 0]], "rojo"], 3, 21);
+                            pieza = new Pieza([[[0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0, 0],[0, 0, 0, 0]], "rojo"], 3, 0);
                             this.contadorPiezas['O']++;
                             break;
                         case 5:
-                            pieza = new Pieza([[[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 1, 0], [0, 0, 0, 0]], "azul"], 3, 21);
+                            pieza = new Pieza([[[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 1, 0], [0, 0, 0, 0]], "azul"], 3, 0);
                             this.contadorPiezas['S']++;
                             break;
                         case 6:
-                            pieza = new Pieza([[[0, 1, 1, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 0, 0, 0]], "naranja"], 3, 21);
+                            pieza = new Pieza([[[0, 1, 1, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 0, 0, 0]], "naranja"], 3, 0);
                             this.contadorPiezas['T']++;
                             break;
                         case 7:
-                            pieza = new Pieza([[[0, 0, 0, 0], [1, 1, 1, 0], [0, 1, 0, 0], [0, 0, 0, 0]], "morado"], 3, 21);
+                            pieza = new Pieza([[[1, 1, 1, 0], [0, 1, 0, 0], [0, 0, 0, 0],[0, 0, 0, 0]], "morado"], 3, 0);
                             this.contadorPiezas['Z']++;
                             break;
                     }
@@ -180,36 +179,46 @@ and open the template in the editor.
                 var vertical = this.vertical;
                 var horizontal = this.horizontal;
                 var color = this.formaYcolor[1]
-                        for (var i = 0; i < forma.length; i++) {
+                for (var i = 0; i < forma.length; i++) {
                     for (var j = 0; j < forma[i].length; j++) {
-                        if(forma[i][j]==1){
-                            switch (color){
-                                case 'amarillo':Juego.mapa[vertical+i][horizontal+j]='A';break;
-                                case 'lila':Juego.mapa[vertical+i][horizontal+j]='L';break;
-                                case 'verde':Juego.mapa[vertical+i][horizontal+j]='V';break;
-                                case 'rojo':Juego.mapa[vertical+i][horizontal+j]='R';break;
-                                case 'azul':Juego.mapa[vertical+i][horizontal+j]='B';break;
-                                case 'naranja':Juego.mapa[vertical+i][horizontal+j]='N';break;
-                                case 'morado':Juego.mapa[vertical+i][horizontal+j]='M';break;
+                        if (forma[i][j] == 1) {
+                            switch (color) {
+                                case 'amarillo':
+                                    Juego.mapa[vertical + i][horizontal + j] = 'A';
+                                    break;
+                                case 'lila':
+                                    Juego.mapa[vertical + i][horizontal + j] = 'L';
+                                    break;
+                                case 'verde':
+                                    Juego.mapa[vertical + i][horizontal + j] = 'V';
+                                    break;
+                                case 'rojo':
+                                    Juego.mapa[vertical + i][horizontal + j] = 'R';
+                                    break;
+                                case 'azul':
+                                    Juego.mapa[vertical + i][horizontal + j] = 'B';
+                                    break;
+                                case 'naranja':
+                                    Juego.mapa[vertical + i][horizontal + j] = 'N';
+                                    break;
+                                case 'morado':
+                                    Juego.mapa[vertical + i][horizontal + j] = 'M';
+                                    break;
                             }
-                            
+
                         }
                     }
                 }
             };
-            
+
             window.onload = function () {
-                Juego.iniciarJuego();
-//                setInterval(function () {
-//                    var pieza = Juego.calcularPiezaSiguiente();
-//                    console.log(pieza);
-//                }, Juego.intervaloTiempo);
+                Juego.iniciarMapa();
                 var pieza = Juego.calcularPiezaSiguiente();
                 pieza.pintaPieza();
-                Juego.iniciarJuego();
+                Juego.cargarMapa();
                 console.log(Juego.mapa);
-                
-                
+
+
             }
 
 
