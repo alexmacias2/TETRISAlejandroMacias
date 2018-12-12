@@ -20,7 +20,7 @@ and open the template in the editor.
         <img src="imagenes/lila.jpg" id="lila" style="display: none;">
         <img src="imagenes/rosa.jpg" id="rosa" style="display: none;">
         <img src="imagenes/taronja.jpg" id="taronja" style="display: none;">
-        <img src="imagenes/verd.jpg" id="naranja" style="display: none;">
+        <img src="imagenes/verd.jpg" id="verde" style="display: none;">
         <img src="imagenes/vermell.jpg" id="rojo" style="display: none;">
 
         <!-- Espai de dibuix -->
@@ -58,7 +58,7 @@ and open the template in the editor.
                             if (this.mapa[i][j] == 0) {
                                 imagen = document.getElementById("blanco");
                             }
-                            if (this.mapa[i][j] == 1) {
+                            if (this.mapa[i][j] == 'B') {
                                 imagen = document.getElementById("azul");
                             }
                             if (this.mapa[i][j] == 'A') {
@@ -67,11 +67,17 @@ and open the template in the editor.
                             if (this.mapa[i][j] == 'L') {
                                 imagen = document.getElementById("lila");
                             }
-                            if (this.mapa[i][j] == 0) {
-                                imagen = document.getElementById("blanco");
+                            if (this.mapa[i][j] == 'N') {
+                                imagen = document.getElementById("taronja");
                             }
-                            if (this.mapa[i][j] == 0) {
-                                imagen = document.getElementById("blanco");
+                            if (this.mapa[i][j] == 'M') {
+                                imagen = document.getElementById("rosa");
+                            }
+                            if (this.mapa[i][j] == 'V') {
+                                imagen = document.getElementById("verde");
+                            } 
+                            if (this.mapa[i][j] == 'R') {
+                                imagen = document.getElementById("rojo");
                             }
                             ctx.drawImage(imagen, j * 21, i * 21, 20, 20);
                             // document.write("<br/>");
@@ -91,7 +97,7 @@ and open the template in the editor.
                     var pieza = Math.floor(Math.random() * (8 - 1) + 1);
                     switch (pieza) {
                         case 1:
-                            pieza = new Pieza([[ [0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 0, 0],[0, 0, 0, 0]], "groc"], 3, 21);
+                            pieza = new Pieza([[[0, 0, 0, 0], [0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 0, 0]], "amarillo"], 3, 21);
                             this.contadorPiezas['I']++;
                             break;
                         case 2:
@@ -99,23 +105,23 @@ and open the template in the editor.
                             this.contadorPiezas['J']++;
                             break;
                         case 3:
-                            pieza = new Pieza([[[0, 1, 1, 0], [1, 1, 0, 0], [0, 0, 0, 0],[0, 0, 0, 0]], "verd"], 3, 21);
+                            pieza = new Pieza([[[0, 0, 0, 0], [0, 1, 1, 0], [1, 1, 0, 0], [0, 0, 0, 0]], "verde"], 3, 21);
                             this.contadorPiezas['L']++;
                             break;
                         case 4:
-                            pieza = new Pieza([[[0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0, 0],[0, 0, 0, 0]], "roig"], 3, 21);
+                            pieza = new Pieza([[[0, 0, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0, 0]], "rojo"], 3, 21);
                             this.contadorPiezas['O']++;
                             break;
                         case 5:
-                            pieza = new Pieza([[[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 1, 0], [0, 0, 0, 0]], "blau"], 3, 21);
+                            pieza = new Pieza([[[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 1, 0], [0, 0, 0, 0]], "azul"], 3, 21);
                             this.contadorPiezas['S']++;
                             break;
                         case 6:
-                            pieza = new Pieza([[[0, 1, 1, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 0, 0, 0]], "taronga"], 3, 21);
+                            pieza = new Pieza([[[0, 1, 1, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 0, 0, 0]], "naranja"], 3, 21);
                             this.contadorPiezas['T']++;
                             break;
                         case 7:
-                            pieza = new Pieza([[[1, 1, 1, 0], [0, 1, 0, 0], [0, 0, 0, 0],[0, 0, 0, 0]], "morat"], 3, 21);
+                            pieza = new Pieza([[[0, 0, 0, 0], [1, 1, 1, 0], [0, 1, 0, 0], [0, 0, 0, 0]], "morado"], 3, 21);
                             this.contadorPiezas['Z']++;
                             break;
                     }
@@ -177,7 +183,16 @@ and open the template in the editor.
                         for (var i = 0; i < forma.length; i++) {
                     for (var j = 0; j < forma[i].length; j++) {
                         if(forma[i][j]==1){
-                            Juego.mapa[vertical+i][horizontal+j]=1;
+                            switch (color){
+                                case 'amarillo':Juego.mapa[vertical+i][horizontal+j]='A';break;
+                                case 'lila':Juego.mapa[vertical+i][horizontal+j]='L';break;
+                                case 'verde':Juego.mapa[vertical+i][horizontal+j]='V';break;
+                                case 'rojo':Juego.mapa[vertical+i][horizontal+j]='R';break;
+                                case 'azul':Juego.mapa[vertical+i][horizontal+j]='B';break;
+                                case 'naranja':Juego.mapa[vertical+i][horizontal+j]='N';break;
+                                case 'morado':Juego.mapa[vertical+i][horizontal+j]='M';break;
+                            }
+                            
                         }
                     }
                 }
@@ -191,6 +206,7 @@ and open the template in the editor.
 //                }, Juego.intervaloTiempo);
                 var pieza = Juego.calcularPiezaSiguiente();
                 pieza.pintaPieza();
+                Juego.iniciarJuego();
                 console.log(Juego.mapa);
                 
                 
