@@ -43,6 +43,11 @@ and open the template in the editor.
                     T: 0,
                     Z: 0
                 },
+                borrarCanvas: function () {
+                    var canvas = document.getElementById("espai");
+                    var ctx = canvas.getContext("2d");
+                    ctx.clearRect(0, 0, 350, 600);
+                },
                 cargarMapa: function () {
                     var canvas = document.getElementById("espai");
                     var ctx = canvas.getContext("2d");
@@ -210,7 +215,7 @@ and open the template in the editor.
                     }
                 }
             };
-            
+
             Pieza.prototype.borraPieza = function () {
                 var forma = this.formaYcolor[0];
                 var vertical = this.vertical;
@@ -223,24 +228,44 @@ and open the template in the editor.
                     }
                 }
             };
-            
+
             Pieza.prototype.bajaPieza = function () {
                 this.borraPieza();
-                this.vertical=this.vertical+1;
-                this.pintaPieza();
+                this.vertical = this.vertical + 1;
             };
 
+            Pieza.prototype.puedeBajar = function () {
+                var forma = this.formaYcolor[0];
+                var vertical = this.vertical;
+                var horizontal = this.horizontal;
+                var color = this.formaYcolor[1];
+                for (var i = 0; i < forma.length; i++) {
+                    for (var j = 0; j < forma[i].length; j++) {
+                        if (forma[i][j] == 1) {
+                            if (Juego.mapa[vertical + i][horizontal + j] != 0) {
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            };
             window.onload = function () {
                 Juego.iniciarMapa();
+                Juego.cargarMapa();
                 var pieza = Juego.calcularPiezaSiguiente();
-                pieza.pintaPieza();
-                Juego.cargarMapa();
-                console.log(Juego.mapa);
-                pieza.bajaPieza();
-                pieza.bajaPieza();
-                pieza.bajaPieza();
-                console.log(Juego.mapa);
-                Juego.cargarMapa();
+                setInterval(function () {
+                    if (pieza.puedeBajar() == true) {
+                        pieza.pintaPieza();
+
+                    } else {
+                        alert('no');
+                    }
+                    Juego.borrarCanvas();
+                    Juego.cargarMapa();
+                    pieza.bajaPieza();
+                }, Juego.intervaloTiempo);
 
 
             }
