@@ -96,7 +96,7 @@ and open the template in the editor.
                     var pieza = Math.floor(Math.random() * (8 - 1) + 1);
                     switch (pieza) {
                         case 1:
-                            pieza = new Pieza([[[0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 0, 0],[0, 0, 0, 0]], "amarillo"], 3, 0);
+                            pieza = new Pieza([[[0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 0, 0], [0, 0, 0, 0]], "amarillo"], 3, 0);
                             this.contadorPiezas['I']++;
                             break;
                         case 2:
@@ -104,11 +104,11 @@ and open the template in the editor.
                             this.contadorPiezas['J']++;
                             break;
                         case 3:
-                            pieza = new Pieza([[ [0, 1, 1, 0], [1, 1, 0, 0], [0, 0, 0, 0],[0, 0, 0, 0]], "verde"], 3, 0);
+                            pieza = new Pieza([[[0, 1, 1, 0], [1, 1, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], "verde"], 3, 0);
                             this.contadorPiezas['L']++;
                             break;
                         case 4:
-                            pieza = new Pieza([[[0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0, 0],[0, 0, 0, 0]], "rojo"], 3, 0);
+                            pieza = new Pieza([[[0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0, 0], [0, 0, 0, 0]], "rojo"], 3, 0);
                             this.contadorPiezas['O']++;
                             break;
                         case 5:
@@ -120,7 +120,7 @@ and open the template in the editor.
                             this.contadorPiezas['T']++;
                             break;
                         case 7:
-                            pieza = new Pieza([[[1, 1, 1, 0], [0, 1, 0, 0], [0, 0, 0, 0],[0, 0, 0, 0]], "morado"], 3, 0);
+                            pieza = new Pieza([[[1, 1, 1, 0], [0, 1, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], "morado"], 3, 0);
                             this.contadorPiezas['Z']++;
                             break;
                     }
@@ -178,7 +178,7 @@ and open the template in the editor.
                 var forma = this.formaYcolor[0];
                 var vertical = this.vertical;
                 var horizontal = this.horizontal;
-                var color = this.formaYcolor[1]
+                var color = this.formaYcolor[1];
                 for (var i = 0; i < forma.length; i++) {
                     for (var j = 0; j < forma[i].length; j++) {
                         if (forma[i][j] == 1) {
@@ -210,6 +210,25 @@ and open the template in the editor.
                     }
                 }
             };
+            
+            Pieza.prototype.borraPieza = function () {
+                var forma = this.formaYcolor[0];
+                var vertical = this.vertical;
+                var horizontal = this.horizontal;
+                for (var i = 0; i < forma.length; i++) {
+                    for (var j = 0; j < forma[i].length; j++) {
+                        if (forma[i][j] == 1) {
+                            Juego.mapa[vertical + i][horizontal + j] = 0;
+                        }
+                    }
+                }
+            };
+            
+            Pieza.prototype.bajaPieza = function () {
+                this.borraPieza();
+                this.vertical=this.vertical+1;
+                this.pintaPieza();
+            };
 
             window.onload = function () {
                 Juego.iniciarMapa();
@@ -217,6 +236,11 @@ and open the template in the editor.
                 pieza.pintaPieza();
                 Juego.cargarMapa();
                 console.log(Juego.mapa);
+                pieza.bajaPieza();
+                pieza.bajaPieza();
+                pieza.bajaPieza();
+                console.log(Juego.mapa);
+                Juego.cargarMapa();
 
 
             }
