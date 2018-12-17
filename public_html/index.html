@@ -32,7 +32,7 @@ and open the template in the editor.
                 puntuacionMaxima: 0,
                 piezaActual: '',
                 piezaSiguiente: '',
-                intervaloTiempo: 1000,
+                intervaloTiempo: 300,
                 nivel: 1,
                 contadorPiezas: {
                     I: 0,
@@ -235,18 +235,29 @@ and open the template in the editor.
             };
 
             Pieza.prototype.puedeBajar = function () {
-                var forma = this.formaYcolor[0];
-                var vertical = this.vertical;
-                var horizontal = this.horizontal;
-                var color = this.formaYcolor[1];
+                var forma = this.formaYcolor[0];var color = this.formaYcolor[1];
                 for (var i = 0; i < forma.length; i++) {
                     for (var j = 0; j < forma[i].length; j++) {
-                        if (forma[i][j] == 1) {
-                            if (Juego.mapa[vertical + i][horizontal + j] != 0) {
+                        if ((forma[i][j]) == 1) {
+                             if(color=="azul" || color=="naranja"){
+                             if (((this.vertical + i+1) >= (Juego.mapa.length - 1)) ||
+                                    (Juego.mapa[this.vertical + (i + 1)][this.horizontal + j] == "P")) {
+                                Juego.mapa[this.vertical + i ][this.horizontal + j] == "P";
                                 return false;
                             } else {
                                 return true;
-                            }
+                            } 
+                        }else{
+                            
+                        }
+                                 if (((this.vertical + i) >= (Juego.mapa.length - 1)) ||
+                                    (Juego.mapa[this.vertical + (i + 1)][this.horizontal + j] == "P")) {
+                                Juego.mapa[this.vertical + i ][this.horizontal + j] == "P";
+                                return false;
+                            } else {
+                                return true;
+                            } 
+                          
                         }
                     }
                 }
@@ -258,14 +269,19 @@ and open the template in the editor.
                 setInterval(function () {
                     if (pieza.puedeBajar() == true) {
                         pieza.pintaPieza();
-
+                        Juego.borrarCanvas();
+                        Juego.cargarMapa();
+                        pieza.bajaPieza();
                     } else {
-                        alert('no');
+                        pieza=Juego.calcularPiezaSiguiente();
                     }
-                    Juego.borrarCanvas();
-                    Juego.cargarMapa();
-                    pieza.bajaPieza();
+
+
+
+
                 }, Juego.intervaloTiempo);
+
+
 
 
             }
