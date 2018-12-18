@@ -22,6 +22,7 @@ and open the template in the editor.
         <img src="imagenes/taronja.jpg" id="taronja" style="display: none;">
         <img src="imagenes/verd.jpg" id="verde" style="display: none;">
         <img src="imagenes/vermell.jpg" id="rojo" style="display: none;">
+        <img src="imagenes/negro.jpg" id="negro" style="display: none;">
 
         <!-- Espai de dibuix -->
         <canvas id="espai" width="350" height="600"> </canvas>
@@ -81,6 +82,9 @@ and open the template in the editor.
                             }
                             if (this.mapa[i][j] == 'R') {
                                 imagen = document.getElementById("rojo");
+                            }
+                            if (this.mapa[i][j] == 'P') {
+                                imagen = document.getElementById("negro");
                             }
                             ctx.drawImage(imagen, j * 21, i * 21, 20, 20);
                             // document.write("<br/>");
@@ -209,6 +213,9 @@ and open the template in the editor.
                                 case 'morado':
                                     Juego.mapa[vertical + i][horizontal + j] = 'M';
                                     break;
+                                case 'negro':
+                                    Juego.mapa[vertical + i][horizontal + j] = 'P';
+                                    break;
                             }
 
                         }
@@ -235,29 +242,34 @@ and open the template in the editor.
             };
 
             Pieza.prototype.puedeBajar = function () {
-                var forma = this.formaYcolor[0];var color = this.formaYcolor[1];
+                var forma = this.formaYcolor[0];
+                var color = this.formaYcolor[1];
+                var vertical = this.vertical;
+                var horizontal = this.horizontal;
+                var auxiliar = 0;
+                switch (color) {
+                    case 'azul':
+                        auxiliar = 1;
+                        break;
+                    case 'naranja':
+                        auxiliar = 1;
+                        break;
+                    case 'lila':
+                        auxiliar = 2;
+                        break;
+                    default:
+                        auxiliar = 0;
+                        break;
+                }
                 for (var i = 0; i < forma.length; i++) {
                     for (var j = 0; j < forma[i].length; j++) {
-                        if ((forma[i][j]) == 1) {
-                             if(color=="azul" || color=="naranja"){
-                             if (((this.vertical + i+1) >= (Juego.mapa.length - 1)) ||
-                                    (Juego.mapa[this.vertical + (i + 1)][this.horizontal + j] == "P")) {
-                                Juego.mapa[this.vertical + i ][this.horizontal + j] == "P";
+                        if (forma[i][j] == 1) {
+                            if (((vertical + i + auxiliar) >= (Juego.mapa.length - 1)) ||
+                                    (Juego.mapa[vertical + (i + 1 + auxiliar)][horizontal + j] == "P")) {
                                 return false;
                             } else {
                                 return true;
-                            } 
-                        }else{
-                            
-                        }
-                                 if (((this.vertical + i) >= (Juego.mapa.length - 1)) ||
-                                    (Juego.mapa[this.vertical + (i + 1)][this.horizontal + j] == "P")) {
-                                Juego.mapa[this.vertical + i ][this.horizontal + j] == "P";
-                                return false;
-                            } else {
-                                return true;
-                            } 
-                          
+                            }
                         }
                     }
                 }
@@ -273,12 +285,12 @@ and open the template in the editor.
                         Juego.cargarMapa();
                         pieza.bajaPieza();
                     } else {
-                        pieza=Juego.calcularPiezaSiguiente();
+                        pieza.formaYcolor='negro';
+                        pieza.pintaPieza();
+                        console.log(pieza.formaYcolor);
+                        console.log(Juego.mapa);
+                        pieza = Juego.calcularPiezaSiguiente();
                     }
-
-
-
-
                 }, Juego.intervaloTiempo);
 
 
