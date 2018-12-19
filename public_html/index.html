@@ -23,6 +23,7 @@ and open the template in the editor.
         <img src="imagenes/verd.jpg" id="verde" style="display: none;">
         <img src="imagenes/vermell.jpg" id="rojo" style="display: none;">
         <img src="imagenes/negro.jpg" id="negro" style="display: none;">
+        <img src="imagenes/gris.jpg" id="gris" style="display: none;">
 
         <!-- Espai de dibuix -->
         <canvas id="espai" width="350" height="600"> </canvas>
@@ -86,6 +87,9 @@ and open the template in the editor.
                             if (this.mapa[i][j] == 'P') {
                                 imagen = document.getElementById("negro");
                             }
+                            if (this.mapa[i][j] == 'G') {
+                                imagen = document.getElementById("gris");
+                            }
                             ctx.drawImage(imagen, j * 21, i * 21, 20, 20);
                             // document.write("<br/>");
                         }
@@ -95,7 +99,7 @@ and open the template in the editor.
                     for (var i = 0; i < 25; i++) {
                         this.mapa.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
                     }
-                    this.mapa.push(['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'])
+                    this.mapa.push(['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G']);
                 },
                 mostrarInfo: function () {
                     document.getElementById("titulo").innerHTML = "<h1>TETRIS</h1>";
@@ -134,7 +138,6 @@ and open the template in the editor.
                             this.contadorPiezas['Z']++;
                             break;
                     }
-                    this.piezaActual = pieza;
                     return pieza;
                 },
                 interaccionUsuario: function () {
@@ -224,7 +227,7 @@ and open the template in the editor.
                     }
                 }
             };
-        
+
             Pieza.prototype.borraPieza = function () {
                 var forma = Juego.piezaActual.formaYcolor[0];
                 var vertical = Juego.piezaActual.vertical;
@@ -252,13 +255,13 @@ and open the template in the editor.
                 var puede;
                 switch (color) {
                     case 'rojo':
-                        auxiliar = 0;
+                        auxiliar = -1;
                         break;
-                    case 'naranja':
-                        auxiliar = 0;
+                    case 'amarillo':
+                        auxiliar = -1;
                         break;
-                    case 'lila':
-                        auxiliar = 0;
+                    case 'azul':
+                        auxiliar = -1;
                         break;
                     default:
                         auxiliar = 0;
@@ -268,7 +271,9 @@ and open the template in the editor.
                     for (var j = 0; j < forma[i].length; j++) {
                         if (forma[i][j] == 1) {
                             console.log((Juego.mapa[vertical + i][horizontal]));
-                            if (Juego.mapa[vertical + i + 1][horizontal + j + auxiliar] == 'P') {
+                            if ((Juego.mapa[vertical + i + 1][horizontal + j + auxiliar] == 'G') 
+                                    || (Juego.mapa[vertical + i + 1][horizontal + j + auxiliar] == 'P')
+                                    || (Juego.mapa[vertical + i + 1][horizontal + j ] == 'P')) {
                                 puede = false;
                             } else {
                                 puede = true;
@@ -283,20 +288,24 @@ and open the template in the editor.
                 Juego.cargarMapa();
                 Juego.piezaActual = Juego.calcularPiezaSiguiente();
                 Juego.piezaSiguiente = Juego.calcularPiezaSiguiente();
+                console.log(Juego.piezaActual);
+                console.log(Juego.piezaSiguiente);
                 setInterval(function () {
+                    Juego.piezaActual.pintaPieza();
+                    Juego.borrarCanvas();
+                    Juego.cargarMapa();
                     Juego.piezaActual.baja = Juego.piezaActual.puedeBajar();
-                    if (Juego.piezaActual.baja == true) {
-                        Juego.piezaActual.pintaPieza();
-                        Juego.borrarCanvas();
-                        Juego.cargarMapa();
+                    console.log(Juego.piezaActual.baja);
+                    if(Juego.piezaActual.baja==true){
                         Juego.piezaActual.bajaPieza();
-                    } else {
-                        Juego.piezaActual.formaYcolor[1] = 'negro';
+                    }else{
+                        Juego.piezaActual.formaYcolor[1]='negro';
                         Juego.piezaActual.pintaPieza();
-                        console.log(Juego.mapa);
-                        Juego.piezaActual = Juego.piezaSiguiente;
-                        Juego.piezaSiguiente = Juego.calcularPiezaSiguiente();
+                        Juego.piezaActual=Juego.piezaSiguiente;
+                        Juego.piezaSiguiente=Juego.calcularPiezaSiguiente();
                     }
+
+
                 }, Juego.intervaloTiempo);
 
 
@@ -304,7 +313,7 @@ and open the template in the editor.
 
             }
 
-            
+
 
         </script>
     </body>
