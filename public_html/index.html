@@ -10,7 +10,7 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
-    <body>
+    <body id="all">
         <p id="titulo"></p>
         <p id="puntuacion"></p>
         <p id="puntuacionMax"></p>
@@ -97,9 +97,9 @@ and open the template in the editor.
                 },
                 iniciarMapa: function () {
                     for (var i = 0; i < 25; i++) {
-                        this.mapa.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+                        this.mapa.push(['G', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'G']);
                     }
-                    this.mapa.push(['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G']);
+                    this.mapa.push(['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G']);
                 },
                 mostrarInfo: function () {
                     document.getElementById("titulo").innerHTML = "<h1>TETRIS</h1>";
@@ -110,42 +110,72 @@ and open the template in the editor.
                     var pieza = Math.floor(Math.random() * (8 - 1) + 1);
                     switch (pieza) {
                         case 1:
-                            pieza = new Pieza([[[0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 0, 0], [0, 0, 0, 0]], "amarillo"], 3, 0);
+                            pieza = new Pieza([[[0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 0, 0], [0, 0, 0, 0]], "amarillo"], 4, 0);
                             this.contadorPiezas['I']++;
                             break;
                         case 2:
-                            pieza = new Pieza([[[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0]], "lila"], 3, 0);
+                            pieza = new Pieza([[[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0]], "lila"], 4, 0);
                             this.contadorPiezas['J']++;
                             break;
                         case 3:
-                            pieza = new Pieza([[[0, 1, 1, 0], [1, 1, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], "verde"], 3, 0);
+                            pieza = new Pieza([[[0, 1, 1, 0], [1, 1, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], "verde"], 4, 0);
                             this.contadorPiezas['L']++;
                             break;
                         case 4:
-                            pieza = new Pieza([[[1, 1, 0, 0], [0, 1, 1, 0], [0, 0, 0, 0], [0, 0, 0, 0]], "rojo"], 3, 0);
+                            pieza = new Pieza([[[1, 1, 0, 0], [0, 1, 1, 0], [0, 0, 0, 0], [0, 0, 0, 0]], "rojo"], 4, 0);
                             this.contadorPiezas['O']++;
                             break;
                         case 5:
-                            pieza = new Pieza([[[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 1, 0], [0, 0, 0, 0]], "azul"], 3, 0);
+                            pieza = new Pieza([[[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 1, 0], [0, 0, 0, 0]], "azul"], 4, 0);
                             this.contadorPiezas['S']++;
                             break;
                         case 6:
-                            pieza = new Pieza([[[0, 1, 1, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 0, 0, 0]], "naranja"], 3, 0);
+                            pieza = new Pieza([[[0, 1, 1, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 0, 0, 0]], "naranja"], 4, 0);
                             this.contadorPiezas['T']++;
                             break;
                         case 7:
-                            pieza = new Pieza([[[1, 1, 1, 0], [0, 1, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], "morado"], 3, 0);
+                            pieza = new Pieza([[[1, 1, 1, 0], [0, 1, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]], "morado"], 4, 0);
                             this.contadorPiezas['Z']++;
                             break;
                     }
                     return pieza;
                 },
-                interaccionUsuario: function () {
-
+                interaccionUsuario: function (e) {
+                    if (e.code == "ArrowLeft") {
+                        Juego.piezaActual.moverIzquierda();
+                    }
+                    if (e.code == "ArrowRight") {
+                        Juego.piezaActual.moverDerecha();
+                    }
                 },
                 movimiento: function () {
-
+                    window.onload = function () {
+                        Juego.iniciarMapa();
+                        Juego.cargarMapa();
+                        Juego.piezaActual = Juego.calcularPiezaSiguiente();
+                        Juego.piezaSiguiente = Juego.calcularPiezaSiguiente();
+                        console.log(Juego.piezaActual);
+                        console.log(Juego.piezaSiguiente);
+                        var element = document.getElementById("all");
+                        setInterval(function () {
+                            element.addEventListener("keydown", Juego.interaccionUsuario);
+                            Juego.piezaActual.pintaPieza();
+                            Juego.borrarCanvas();
+                            Juego.cargarMapa();
+                            Juego.piezaActual.baja = Juego.piezaActual.puedeBajar();
+                            console.log(Juego.piezaActual.baja);
+                            if (Juego.piezaActual.baja == true) {
+                                Juego.piezaActual.bajaPieza();
+                            } else {
+                                Juego.piezaActual.formaYcolor[1] = 'negro';
+                                Juego.piezaActual.pintaPieza();
+                                Juego.piezaActual = Juego.piezaSiguiente;
+                                Juego.piezaSiguiente = Juego.calcularPiezaSiguiente();
+                            }
+                        }, Juego.intervaloTiempo);
+                    }
                 }
+
             };
             var Pieza = function (formaYcolor, horizontal, vertical) {
                 this.formaYcolor = formaYcolor;
@@ -170,16 +200,29 @@ and open the template in the editor.
                 Juego.piezaActual.formaYcolor[0] = formaNova;
             };
             Pieza.prototype.moverIzquierda = function () {
-                if ((horizontal + 1) < 14) {
-                    horizontal++;
+                var auxiliar;
+                switch(Juego.piezaActual.formaYcolor[1]){
+                    case 'amarillo':auxiliar=-1;break;
+                    case 'lila':auxiliar=-1;break;
+                    case 'naranja':auxiliar=-1;break;
+                    case 'azul':auxiliar=-1;break;
+                    default:auxiliar=0;break;
+                }
+                if ((Juego.piezaActual.horizontal - 1) > 0+auxiliar) {
+                    Juego.piezaActual.horizontal--;
                     return true;
                 } else {
                     return false;
                 }
             };
             Pieza.prototype.moverDerecha = function () {
-                if ((horizontal - 1) > 0) {
-                    horizontal--;
+                var auxiliar;
+                switch(Juego.piezaActual.formaYcolor[1]){
+                    case 'lila':auxiliar=1;break;
+                    default:auxiliar=0;break;
+                }
+                if ((Juego.piezaActual.horizontal + 1) < 9+auxiliar) {
+                    Juego.piezaActual.horizontal++;
                     return true;
                 } else {
                     return false;
@@ -271,7 +314,7 @@ and open the template in the editor.
                     for (var j = 0; j < forma[i].length; j++) {
                         if (forma[i][j] == 1) {
                             console.log((Juego.mapa[vertical + i][horizontal]));
-                            if ((Juego.mapa[vertical + i + 1][horizontal + j + auxiliar] == 'G') 
+                            if ((Juego.mapa[vertical + i + 1][horizontal + j + auxiliar] == 'G')
                                     || (Juego.mapa[vertical + i + 1][horizontal + j + auxiliar] == 'P')
                                     || (Juego.mapa[vertical + i + 1][horizontal + j ] == 'P')) {
                                 puede = false;
@@ -283,36 +326,8 @@ and open the template in the editor.
                 }
                 return puede;
             };
-            window.onload = function () {
-                Juego.iniciarMapa();
-                Juego.cargarMapa();
-                Juego.piezaActual = Juego.calcularPiezaSiguiente();
-                Juego.piezaSiguiente = Juego.calcularPiezaSiguiente();
-                console.log(Juego.piezaActual);
-                console.log(Juego.piezaSiguiente);
-                setInterval(function () {
-                    Juego.piezaActual.pintaPieza();
-                    Juego.borrarCanvas();
-                    Juego.cargarMapa();
-                    Juego.piezaActual.baja = Juego.piezaActual.puedeBajar();
-                    console.log(Juego.piezaActual.baja);
-                    if(Juego.piezaActual.baja==true){
-                        Juego.piezaActual.bajaPieza();
-                    }else{
-                        Juego.piezaActual.formaYcolor[1]='negro';
-                        Juego.piezaActual.pintaPieza();
-                        Juego.piezaActual=Juego.piezaSiguiente;
-                        Juego.piezaSiguiente=Juego.calcularPiezaSiguiente();
-                    }
 
-
-                }, Juego.intervaloTiempo);
-
-
-
-
-            }
-
+            Juego.movimiento();
 
 
         </script>
