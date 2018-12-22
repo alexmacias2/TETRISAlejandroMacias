@@ -34,7 +34,7 @@ and open the template in the editor.
                 puntuacionMaxima: 0,
                 piezaActual: '',
                 piezaSiguiente: '',
-                intervaloTiempo: 300,
+                intervaloTiempo: 1000,
                 nivel: 1,
                 contadorPiezas: {
                     I: 0,
@@ -145,7 +145,16 @@ and open the template in the editor.
                         Juego.piezaActual.moverIzquierda();
                     }
                     if (e.code == "ArrowRight") {
-                        Juego.piezaActual.moverDerecha();
+                        
+                        if(Juego.piezaActual.moverDerecha()==true){
+                            Juego.piezaActual.horizontal++;
+                        }
+                    }
+                    if (e.code == "ArrowUp") {
+                        Juego.piezaActual.rotarIzquierda();
+                    }
+                    if (e.code == "ArrowDown") {
+                        Juego.piezaActual.rotarDerecha();
                     }
                 },
                 movimiento: function () {
@@ -184,31 +193,46 @@ and open the template in the editor.
                 this.baja = true;
             };
             Pieza.prototype.rotarIzquierda = function () {
-                Juego.piezaActual.rotarDerecha();
-                Juego.piezaActual.rotarDerecha();
-                Juego.piezaActual.rotarDerecha();
+                if (Juego.piezaActual.formaYcolor[1] != 'amarillo') {
+                    Juego.piezaActual.rotarDerecha();
+                    Juego.piezaActual.rotarDerecha();
+                    Juego.piezaActual.rotarDerecha();
+                }
             };
             Pieza.prototype.rotarDerecha = function () {
-                var forma = Juego.piezaActual.formaYcolor[0];
-                var formaNova = new Array();
-                for (var i = 0; i < forma.length; i++) {
-                    formaNova[i] = new Array();
-                    for (var j = 0; j < forma[i].length; j++) {
-                        formaNova[i][j] = forma[forma[i].length - 1 - j][i];
+                if (Juego.piezaActual.formaYcolor[1] != 'amarillo') {
+                    var forma = Juego.piezaActual.formaYcolor[0];
+                    var formaNova = new Array();
+                    for (var i = 0; i < forma.length; i++) {
+                        formaNova[i] = new Array();
+                        for (var j = 0; j < forma[i].length; j++) {
+                            formaNova[i][j] = forma[forma[i].length - 1 - j][i];
+                        }
                     }
+                    Juego.piezaActual.formaYcolor[0] = formaNova;
+                    console.log(formaNova);
                 }
-                Juego.piezaActual.formaYcolor[0] = formaNova;
             };
             Pieza.prototype.moverIzquierda = function () {
                 var auxiliar;
-                switch(Juego.piezaActual.formaYcolor[1]){
-                    case 'amarillo':auxiliar=-1;break;
-                    case 'lila':auxiliar=-1;break;
-                    case 'naranja':auxiliar=-1;break;
-                    case 'azul':auxiliar=-1;break;
-                    default:auxiliar=0;break;
+                switch (Juego.piezaActual.formaYcolor[1]) {
+                    case 'amarillo':
+                        auxiliar = -1;
+                        break;
+                    case 'lila':
+                        auxiliar = -1;
+                        break;
+                    case 'naranja':
+                        auxiliar = -1;
+                        break;
+                    case 'azul':
+                        auxiliar = -1;
+                        break;
+                    default:
+                        auxiliar = 0;
+                        break;
                 }
-                if ((Juego.piezaActual.horizontal - 1) > 0+auxiliar) {
+                if ((Juego.piezaActual.horizontal - 1) > 0 + auxiliar) {
                     Juego.piezaActual.horizontal--;
                     return true;
                 } else {
@@ -216,17 +240,29 @@ and open the template in the editor.
                 }
             };
             Pieza.prototype.moverDerecha = function () {
-                var auxiliar;
-                switch(Juego.piezaActual.formaYcolor[1]){
-                    case 'lila':auxiliar=1;break;
-                    default:auxiliar=0;break;
+                var forma = Juego.piezaActual.formaYcolor[0];
+                var vertical = Juego.piezaActual.vertical;
+                var horizontal = Juego.piezaActual.horizontal;
+                var auxiliar = 0;
+                var puede;
+                
+                     for (var i = 0; i < forma.length; i++) {
+                    for (var j = 0; j < forma[i].length; j++) {
+                        if (forma[i][j] == 1) {
+                            console.log((Juego.mapa[vertical + i][horizontal]));
+                            if ((Juego.mapa[vertical + i][horizontal + j + 1 + auxiliar] == 'G')
+                                    || (Juego.mapa[vertical + i][horizontal + j + 1 + auxiliar] == 'P')) {
+                                puede=false;
+                            } else {
+                                puede = true;
+                            }
+                        }
+                    }
+                   
                 }
-                if ((Juego.piezaActual.horizontal + 1) < 9+auxiliar) {
-                    Juego.piezaActual.horizontal++;
-                    return true;
-                } else {
-                    return false;
-                }
+               
+                return puede;
+                
             };
             Pieza.prototype.retornarForma = function () {
                 return Juego.piezaActual.formaYcolor[0];
