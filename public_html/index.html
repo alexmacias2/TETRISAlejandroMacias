@@ -34,7 +34,7 @@ and open the template in the editor.
                 puntuacionMaxima: 0,
                 piezaActual: '',
                 piezaSiguiente: '',
-                intervaloTiempo: 1000,
+                intervaloTiempo: 300,
                 nivel: 1,
                 contadorPiezas: {
                     I: 0,
@@ -44,6 +44,9 @@ and open the template in the editor.
                     S: 0,
                     T: 0,
                     Z: 0
+                },
+                formasAuxiliares: {
+                    azul: [[0, 0, 0, 0], [0, 1, 1, 1], [0, 1, 0, 0], [0, 0, 0, 0]]
                 },
                 borrarCanvas: function () {
                     var canvas = document.getElementById("espai");
@@ -142,11 +145,13 @@ and open the template in the editor.
                 },
                 interaccionUsuario: function (e) {
                     if (e.code == "ArrowLeft") {
-                        Juego.piezaActual.moverIzquierda();
+                        if (Juego.piezaActual.moverIzquierda() == true) {
+                            Juego.piezaActual.horizontal--;
+                        }
                     }
                     if (e.code == "ArrowRight") {
-                        
-                        if(Juego.piezaActual.moverDerecha()==true){
+
+                        if (Juego.piezaActual.moverDerecha() == true) {
                             Juego.piezaActual.horizontal++;
                         }
                     }
@@ -214,55 +219,47 @@ and open the template in the editor.
                 }
             };
             Pieza.prototype.moverIzquierda = function () {
-                var auxiliar;
-                switch (Juego.piezaActual.formaYcolor[1]) {
-                    case 'amarillo':
-                        auxiliar = -1;
-                        break;
-                    case 'lila':
-                        auxiliar = -1;
-                        break;
-                    case 'naranja':
-                        auxiliar = -1;
-                        break;
-                    case 'azul':
-                        auxiliar = -1;
-                        break;
-                    default:
-                        auxiliar = 0;
-                        break;
+                var forma = Juego.piezaActual.formaYcolor[0];
+                var vertical = Juego.piezaActual.vertical;
+                var horizontal = Juego.piezaActual.horizontal;
+                var puede = true;
+                for (var i = 0; i < forma.length; i++) {
+                    for (var j = 0; j < forma[i].length; j++) {
+                        if (forma[i][j] == 1) {
+                            console.log((Juego.mapa[vertical + i][horizontal + j + 1]));
+                            if ((Juego.mapa[vertical + i][horizontal + j - 1] == 'G') || (Juego.mapa[vertical + i][horizontal + j - 1] == 'G')
+                                    || (Juego.mapa[vertical + i][horizontal + j + 1] == 'P')) {
+                                puede = false;
+                            } else {
+                            }
+                        }
+                    }
+
                 }
-                if ((Juego.piezaActual.horizontal - 1) > 0 + auxiliar) {
-                    Juego.piezaActual.horizontal--;
-                    return true;
-                } else {
-                    return false;
-                }
+
+                return puede;
             };
             Pieza.prototype.moverDerecha = function () {
                 var forma = Juego.piezaActual.formaYcolor[0];
                 var vertical = Juego.piezaActual.vertical;
                 var horizontal = Juego.piezaActual.horizontal;
-                var auxiliar = 0;
-                var puede;
-                
-                     for (var i = 0; i < forma.length; i++) {
+                var puede = true;
+                for (var i = 0; i < forma.length; i++) {
                     for (var j = 0; j < forma[i].length; j++) {
                         if (forma[i][j] == 1) {
-                            console.log((Juego.mapa[vertical + i][horizontal]));
-                            if ((Juego.mapa[vertical + i][horizontal + j + 1 + auxiliar] == 'G')
-                                    || (Juego.mapa[vertical + i][horizontal + j + 1 + auxiliar] == 'P')) {
-                                puede=false;
+                            console.log((Juego.mapa[vertical + i][horizontal + j + 1]));
+                            if ((Juego.mapa[vertical + i][horizontal + j + 1] == 'G') || (Juego.mapa[vertical + i][horizontal + j + 1] == 'G')
+                                    || (Juego.mapa[vertical + i][horizontal + j + 1] == 'P')) {
+                                puede = false;
                             } else {
-                                puede = true;
                             }
                         }
                     }
-                   
+
                 }
-               
+
                 return puede;
-                
+
             };
             Pieza.prototype.retornarForma = function () {
                 return Juego.piezaActual.formaYcolor[0];
@@ -330,8 +327,7 @@ and open the template in the editor.
                 var color = Juego.piezaActual.formaYcolor[1];
                 var vertical = Juego.piezaActual.vertical;
                 var horizontal = Juego.piezaActual.horizontal;
-                var auxiliar = 0;
-                var puede;
+                var puede = true;
                 switch (color) {
                     case 'rojo':
                         auxiliar = -1;
@@ -350,12 +346,11 @@ and open the template in the editor.
                     for (var j = 0; j < forma[i].length; j++) {
                         if (forma[i][j] == 1) {
                             console.log((Juego.mapa[vertical + i][horizontal]));
-                            if ((Juego.mapa[vertical + i + 1][horizontal + j + auxiliar] == 'G')
-                                    || (Juego.mapa[vertical + i + 1][horizontal + j + auxiliar] == 'P')
+                            if ((Juego.mapa[vertical + i + 1][horizontal + j] == 'G')
+                                    || (Juego.mapa[vertical + i + 1][horizontal + j] == 'P')
                                     || (Juego.mapa[vertical + i + 1][horizontal + j ] == 'P')) {
                                 puede = false;
                             } else {
-                                puede = true;
                             }
                         }
                     }
