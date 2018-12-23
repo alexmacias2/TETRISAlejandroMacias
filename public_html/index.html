@@ -7,14 +7,19 @@ and open the template in the editor.
 <html>
     <head>
         <title>Tetris</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body id="all">
+        <style type="text/css">
+            #pieza{
+                margin-left: 350px;
+                 }
+            </style>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        </head>
+        <body id="all">
         <p id="titulo"></p>
         <p id="puntuacion"></p>
         <p id="puntuacionMax"></p>
-        <p id="pieza"></p>
+        <p id="pieza" style=""></p>
         <img src="imagenes/blanc.jpg"    id="blanco"    style="display: none;">
         <img src="imagenes/blau.jpg"       id="azul"       style="display: none;">
         <img src="imagenes/groc.jpg" id="amarillo" style="display: none;">
@@ -47,13 +52,11 @@ and open the template in the editor.
                     T: 0,
                     Z: 0
                 },
-                
                 borrarCanvas: function () {
                     var canvas = document.getElementById("espai");
                     var ctx = canvas.getContext("2d");
                     ctx.clearRect(0, 0, 350, 600);
                 },
-                
                 cargarMapa: function () {
                     var canvas = document.getElementById("espai");
                     var ctx = canvas.getContext("2d");
@@ -105,7 +108,7 @@ and open the template in the editor.
 
                     var forma = this.piezaSiguiente.formaYcolor[0];
                     var color = this.piezaSiguiente.formaYcolor[1];
-                    
+
                     document.getElementById("pieza").innerHTML = "<h4>Pieza Siguiente</h4>";
 
                     for (var i = 0; i < forma.length; i++) {
@@ -122,10 +125,10 @@ and open the template in the editor.
                                         foto = document.getElementById("verde");
                                         break;
                                     case 'amarillo':
-                                        foto= document.getElementById("amarillo");
+                                        foto = document.getElementById("amarillo");
                                         break;
                                     case 'rojo':
-                                        foto= document.getElementById("rojo");
+                                        foto = document.getElementById("rojo");
                                         break;
                                     case 'naranja':
                                         foto = document.getElementById("taronja");
