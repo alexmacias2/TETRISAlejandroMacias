@@ -14,6 +14,7 @@ and open the template in the editor.
         <p id="titulo"></p>
         <p id="puntuacion"></p>
         <p id="puntuacionMax"></p>
+        <p id="pieza"></p>
         <img src="imagenes/blanc.jpg"    id="blanco"    style="display: none;">
         <img src="imagenes/blau.jpg"       id="azul"       style="display: none;">
         <img src="imagenes/groc.jpg" id="amarillo" style="display: none;">
@@ -27,6 +28,7 @@ and open the template in the editor.
 
         <!-- Espai de dibuix -->
         <canvas id="espai" width="350" height="600"> </canvas>
+        <canvas id="piezaSiguiente" width="300" height="600"></canvas>
         <script>
             var Juego = {
                 mapa: new Array(),
@@ -34,7 +36,7 @@ and open the template in the editor.
                 puntuacionMaxima: 0,
                 piezaActual: '',
                 piezaSiguiente: '',
-                intervaloTiempo: 300,
+                intervaloTiempo: 200,
                 nivel: 1,
                 contadorPiezas: {
                     I: 0,
@@ -45,19 +47,19 @@ and open the template in the editor.
                     T: 0,
                     Z: 0
                 },
+                
                 borrarCanvas: function () {
                     var canvas = document.getElementById("espai");
                     var ctx = canvas.getContext("2d");
                     ctx.clearRect(0, 0, 350, 600);
                 },
+                
                 cargarMapa: function () {
                     var canvas = document.getElementById("espai");
                     var ctx = canvas.getContext("2d");
                     this.mostrarInfo();
                     var imagen;
-                    //document.write("<h1>TETRIS</h1>")
-                    // document.write("Nivel: " + this.nivel + " Puntuación: "
-                    // + this.puntuacion + " Puntuación Máxima: " + this.puntuacionMaxima + "<br/><br/>")
+
                     for (var i = 0; i < this.mapa.length; i++) {
                         for (var j = 0; j < this.mapa[i].length; j++) {
                             if (this.mapa[i][j] == 0) {
@@ -91,7 +93,52 @@ and open the template in the editor.
                                 imagen = document.getElementById("gris");
                             }
                             ctx.drawImage(imagen, j * 21, i * 21, 20, 20);
-                            // document.write("<br/>");
+                        }
+                    }
+
+
+                },
+                cargarPiezaSiguiente: function () {
+                    var canvasPiezaSiguiente = document.getElementById("piezaSiguiente");
+                    var ctx2 = canvasPiezaSiguiente.getContext("2d");
+                    var foto;
+
+                    var forma = this.piezaSiguiente.formaYcolor[0];
+                    var color = this.piezaSiguiente.formaYcolor[1];
+                    
+                    document.getElementById("pieza").innerHTML = "<h4>Pieza Siguiente</h4>";
+
+                    for (var i = 0; i < forma.length; i++) {
+                        for (var j = 0; j < forma[i].length; j++) {
+                            if (forma[i][j] == 1) {
+                                switch (color) {
+                                    case 'azul':
+                                        foto = document.getElementById("azul");
+                                        break;
+                                    case 'lila':
+                                        foto = document.getElementById("lila");
+                                        break;
+                                    case 'verde':
+                                        foto = document.getElementById("verde");
+                                        break;
+                                    case 'amarillo':
+                                        foto= document.getElementById("amarillo");
+                                        break;
+                                    case 'rojo':
+                                        foto= document.getElementById("rojo");
+                                        break;
+                                    case 'naranja':
+                                        foto = document.getElementById("taronja");
+                                        break;
+                                    case 'morado':
+                                        foto = document.getElementById("rosa");
+                                        break;
+                                }
+                                ctx2.drawImage(foto, j * 30, i * 30, 30, 30);
+                            } else {
+                                foto = document.getElementById("blanco");
+                                ctx2.drawImage(foto, j * 30, i * 30, 30, 30);
+                            }
                         }
                     }
                 },
@@ -162,20 +209,77 @@ and open the template in the editor.
                 comprobarLineas: function () {
                     var contador;
                     var vertical;
-                    for ( vertical = 0; vertical < Juego.mapa.length; vertical++) {
-                        for ( var horizontal = 0; horizontal < Juego.mapa[vertical].length; horizontal++) {
+                    for (vertical = 0; vertical < Juego.mapa.length; vertical++) {
+                        for (var horizontal = 0; horizontal < Juego.mapa[vertical].length; horizontal++) {
                             if (Juego.mapa[vertical][horizontal] == 'P') {
                                 contador++;
                                 if (contador >= 10) {
                                     Juego.mapa = Juego.mapa.slice(0); // make copy 
                                     Juego.mapa.splice(vertical, 1);
-                                    Juego.mapa.unshift(['G',0,0,0,0,0,0,0,0,0,0,'G']);
+                                    Juego.mapa.unshift(['G', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'G']);
+                                    Juego.puntuacion = Juego.puntuacion + 100;
+                                    Juego.comprobarPuntuacion();
                                 }
                             } else {
                                 contador = 0;
                             }
                         }
                     }
+
+                },
+                contarPiezas: function () {
+                    var total;
+                    var contador = 4;
+
+                    total = this.contadorPiezas['I'] + this.contadorPiezas['J'] + this.contadorPiezas['S'] +
+                            this.contadorPiezas['L'] + this.contadorPiezas['O'] + this.contadorPiezas['T'] +
+                            this.contadorPiezas['Z'];
+
+                    if (total == contador) {
+                        Juego.intervaloTiempo = 20;
+                    }
+                    console.log(Juego.intervaloTiempo);
+
+                },
+                comprobarPuntuacion: function () {
+                    if (Juego.puntuacion >= Juego.puntuacionMaxima) {
+                        Juego.puntuacionMaxima = Juego.puntuacion;
+                    }
+                },
+                gameOver: function () {
+                    var array = Juego.mapa[0];
+                    if (array[1] == 'P') {
+                        alert('GAME OVER');
+                    }
+                    if (array[2] == 'P') {
+                        alert('GAME OVER');
+                    }
+                    if (array[3] == 'P') {
+                        alert('GAME OVER');
+                    }
+                    if (array[4] == 'P') {
+                        alert('GAME OVER');
+                    }
+                    if (array[5] == 'P') {
+                        alert('GAME OVER');
+                    }
+                    if (array[6] == 'P') {
+                        alert('GAME OVER');
+                    }
+                    if (array[7] == 'P') {
+                        alert('GAME OVER');
+                    }
+                    if (array[8] == 'P') {
+                        alert('GAME OVER');
+                    }
+                    if (array[9] == 'P') {
+                        alert('GAME OVER');
+                    }
+                    if (array[10] == 'P') {
+                        alert('GAME OVER');
+                    }
+
+
 
                 },
                 movimiento: function () {
@@ -186,8 +290,10 @@ and open the template in the editor.
                         Juego.piezaSiguiente = Juego.calcularPiezaSiguiente();
                         var element = document.getElementById("all");
                         setInterval(function () {
+                            Juego.cargarPiezaSiguiente();
                             element.addEventListener("keydown", Juego.interaccionUsuario);
                             Juego.comprobarLineas();
+                            Juego.gameOver();
                             Juego.piezaActual.pintaPieza();
                             Juego.borrarCanvas();
                             Juego.cargarMapa();
@@ -197,7 +303,10 @@ and open the template in the editor.
                             } else {
                                 Juego.piezaActual.formaYcolor[1] = 'negro';
                                 Juego.piezaActual.pintaPieza();
+                                Juego.puntuacion = Juego.puntuacion + 10;
+                                Juego.comprobarPuntuacion();
                                 Juego.piezaActual = Juego.piezaSiguiente;
+                                Juego.contarPiezas();
                                 Juego.piezaSiguiente = Juego.calcularPiezaSiguiente();
                             }
                         }, Juego.intervaloTiempo);
