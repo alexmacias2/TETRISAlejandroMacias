@@ -169,7 +169,7 @@ and open the template in the editor.
                                 if (contador >= 10) {
                                     Juego.mapa = Juego.mapa.slice(0); // make copy 
                                     Juego.mapa.splice(vertical, 1);
-                                    console.log(Juego.mapa);
+                                    Juego.mapa.unshift(['G',0,0,0,0,0,0,0,0,0,0,'G']);
                                 }
                             } else {
                                 contador = 0;
