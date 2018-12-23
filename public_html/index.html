@@ -159,22 +159,39 @@ and open the template in the editor.
                         Juego.piezaActual.rotarDerecha();
                     }
                 },
+                comprobarLineas: function () {
+                    var contador;
+                    var vertical;
+                    for ( vertical = 0; vertical < Juego.mapa.length; vertical++) {
+                        for ( var horizontal = 0; horizontal < Juego.mapa[vertical].length; horizontal++) {
+                            if (Juego.mapa[vertical][horizontal] == 'P') {
+                                contador++;
+                                if (contador >= 10) {
+                                    Juego.mapa = Juego.mapa.slice(0); // make copy 
+                                    Juego.mapa.splice(vertical, 1);
+                                    console.log(Juego.mapa);
+                                }
+                            } else {
+                                contador = 0;
+                            }
+                        }
+                    }
+
+                },
                 movimiento: function () {
                     window.onload = function () {
                         Juego.iniciarMapa();
                         Juego.cargarMapa();
                         Juego.piezaActual = Juego.calcularPiezaSiguiente();
                         Juego.piezaSiguiente = Juego.calcularPiezaSiguiente();
-                        console.log(Juego.piezaActual);
-                        console.log(Juego.piezaSiguiente);
                         var element = document.getElementById("all");
                         setInterval(function () {
                             element.addEventListener("keydown", Juego.interaccionUsuario);
+                            Juego.comprobarLineas();
                             Juego.piezaActual.pintaPieza();
                             Juego.borrarCanvas();
                             Juego.cargarMapa();
                             Juego.piezaActual.baja = Juego.piezaActual.puedeBajar();
-                            console.log(Juego.piezaActual.baja);
                             if (Juego.piezaActual.baja == true) {
                                 Juego.piezaActual.bajaPieza();
                             } else {
@@ -217,10 +234,10 @@ and open the template in the editor.
                     }
                     for (var vertical = 0; vertical < formaNova.length; vertical++) {
                         for (var horizontal = 0; horizontal < formaNova[vertical].length; horizontal++) {
-                            if(formaNova[vertical][horizontal]==1){
-                                 if (Juego.mapa[Juego.piezaActual.vertical + vertical][Juego.piezaActual.horizontal + horizontal] != 0) {
-                                puede = false;
-                            }
+                            if (formaNova[vertical][horizontal] == 1) {
+                                if (Juego.mapa[Juego.piezaActual.vertical + vertical][Juego.piezaActual.horizontal + horizontal] != 0) {
+                                    puede = false;
+                                }
                             }
                         }
                     }
@@ -239,7 +256,6 @@ and open the template in the editor.
                 for (var i = 0; i < forma.length; i++) {
                     for (var j = 0; j < forma[i].length; j++) {
                         if (forma[i][j] == 1) {
-                            console.log((Juego.mapa[vertical + i][horizontal + j + 1]));
                             if ((Juego.mapa[vertical + i][horizontal + j - 1] == 'G') || (Juego.mapa[vertical + i][horizontal + j - 1] == 'G')
                                     || (Juego.mapa[vertical + i][horizontal + j + 1] == 'P')) {
                                 puede = false;
@@ -260,7 +276,6 @@ and open the template in the editor.
                 for (var i = 0; i < forma.length; i++) {
                     for (var j = 0; j < forma[i].length; j++) {
                         if (forma[i][j] == 1) {
-                            console.log((Juego.mapa[vertical + i][horizontal + j + 1]));
                             if ((Juego.mapa[vertical + i][horizontal + j + 1] == 'G') || (Juego.mapa[vertical + i][horizontal + j + 1] == 'G')
                                     || (Juego.mapa[vertical + i][horizontal + j + 1] == 'P')) {
                                 puede = false;
@@ -346,7 +361,6 @@ and open the template in the editor.
                 for (var i = 0; i < forma.length; i++) {
                     for (var j = 0; j < forma[i].length; j++) {
                         if (forma[i][j] == 1) {
-                            console.log((Juego.mapa[vertical + i][horizontal]));
                             if ((Juego.mapa[vertical + i + 1][horizontal + j] == 'G')
                                     || (Juego.mapa[vertical + i + 1][horizontal + j] == 'P')) {
                                 puede = false;
