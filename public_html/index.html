@@ -21,6 +21,8 @@ and open the template in the editor.
             body{
                 background-color: blueviolet;
                 text-align: center;
+                overflow-y: hidden;
+                overflow-x: hidden;
             }
             #puntuacion{
                 font-family: fantasy;
@@ -49,10 +51,12 @@ and open the template in the editor.
         <img src="imagenes/vermell.jpg" id="rojo" style="display: none;">
         <img src="imagenes/negro.jpg" id="negro" style="display: none;">
         <img src="imagenes/gris.jpg" id="gris" style="display: none;">
+        <img src="imagenes/gameover.jpg" id="gameover" style="display: none;">
 
         <!-- Espai de dibuix -->
         <canvas id="espai" width="350" height="600"> </canvas>
         <canvas id="piezaSiguiente" width="300" height="600"></canvas>
+        <canvas id="GameOver" width="8000" height="8000"></canvas>
         <script>
             var Juego = {
                 mapa: new Array(),
@@ -171,9 +175,16 @@ and open the template in the editor.
                     this.mapa.push(['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G']);
                 },
                 mostrarInfo: function () {
-                    document.getElementById("titulo").innerHTML = "<h1>TETRIS</h1>";
-                    document.getElementById("puntuacion").innerHTML = "Puntuación: " + this.puntuacion;
-                    document.getElementById("puntuacionMax").innerHTML = "Puntuación máxima: " + this.puntuacionMaxima;
+                    if (Juego.gameOver() == 0) {
+                        document.getElementById("titulo").innerHTML = "<h1>GAME OVER! </h1>";
+                        document.getElementById("puntuacion").innerHTML = "Refresca para volver a jugar ";
+                        document.getElementById("puntuacionMax").innerHTML = "PUNTUACIÓN " + this.puntuacion;
+                    } else {
+                        document.getElementById("titulo").innerHTML = "<h1>TETRIS</h1>";
+                        document.getElementById("puntuacion").innerHTML = "Puntuación: " + this.puntuacion;
+                        document.getElementById("puntuacionMax").innerHTML = "Puntuación máxima: " + this.puntuacionMaxima;
+                    }
+
                 },
                 calcularPiezaSiguiente: function () {
                     var pieza = Math.floor(Math.random() * (8 - 1) + 1);
@@ -236,7 +247,7 @@ and open the template in the editor.
                             if (Juego.mapa[vertical][horizontal] == 'P') {
                                 contador++;
                                 if (contador >= 10) {
-                                    Juego.mapa = Juego.mapa.slice(0); // make copy 
+                                    Juego.mapa = Juego.mapa.slice(0);
                                     Juego.mapa.splice(vertical, 1);
                                     Juego.mapa.unshift(['G', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'G']);
                                     Juego.puntuacion = Juego.puntuacion + 100;
@@ -269,53 +280,56 @@ and open the template in the editor.
                     }
                 },
                 gameOver: function () {
+                    var gameover = 1;
                     var array = Juego.mapa[0];
                     if (array[1] == 'P') {
-                        alert('GAME OVER');
+                        gameover = 0;
                     }
                     if (array[2] == 'P') {
-                        alert('GAME OVER');
+                        gameover = 0;
                     }
                     if (array[3] == 'P') {
-                        alert('GAME OVER');
+                        gameover = 0;
                     }
                     if (array[4] == 'P') {
-                        alert('GAME OVER');
+                        gameover = 0;
                     }
                     if (array[5] == 'P') {
-                        alert('GAME OVER');
+                        gameover = 0;
                     }
                     if (array[6] == 'P') {
-                        alert('GAME OVER');
+                        gameover = 0;
                     }
                     if (array[7] == 'P') {
-                        alert('GAME OVER');
+                        gameover = 0;
                     }
                     if (array[8] == 'P') {
-                        alert('GAME OVER');
+                        gameover = 0;
                     }
                     if (array[9] == 'P') {
-                        alert('GAME OVER');
+                        gameover = 0;
                     }
                     if (array[10] == 'P') {
-                        alert('GAME OVER');
+                        gameover = 0;
                     }
 
-
-
+                    return gameover;
                 },
                 movimiento: function () {
                     window.onload = function () {
+                        window.onscroll
                         Juego.iniciarMapa();
                         Juego.cargarMapa();
                         Juego.piezaActual = Juego.calcularPiezaSiguiente();
                         Juego.piezaSiguiente = Juego.calcularPiezaSiguiente();
                         var element = document.getElementById("all");
-                        setInterval(function () {
+                        var interval = setInterval(function () {
+                            if (Juego.gameOver() == 0) {
+                                clearInterval(interval);
+                            }
                             Juego.cargarPiezaSiguiente();
                             element.addEventListener("keydown", Juego.interaccionUsuario);
                             Juego.comprobarLineas();
-                            Juego.gameOver();
                             Juego.piezaActual.pintaPieza();
                             Juego.borrarCanvas();
                             Juego.cargarMapa();
@@ -332,6 +346,7 @@ and open the template in the editor.
                                 Juego.piezaSiguiente = Juego.calcularPiezaSiguiente();
                             }
                         }, Juego.intervaloTiempo);
+
                     }
                 }
 
