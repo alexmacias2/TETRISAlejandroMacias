@@ -1,9 +1,5 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
+
 <html>
     <head>
         <title>Tetris</title>
@@ -58,7 +54,7 @@ and open the template in the editor.
         <canvas id="piezaSiguiente" width="300" height="600"></canvas>
         <canvas id="GameOver" width="8000" height="8000"></canvas>
         <script>
-            var Juego = {
+            var Juego = {//objeto juego
                 mapa: new Array(),
                 puntuacion: 0,
                 puntuacionMaxima: 0,
@@ -75,12 +71,14 @@ and open the template in the editor.
                     T: 0,
                     Z: 0
                 },
-                borrarCanvas: function () {
+                
+                borrarCanvas: function () {//función que borra el canvas
                     var canvas = document.getElementById("espai");
                     var ctx = canvas.getContext("2d");
                     ctx.clearRect(0, 0, 350, 600);
                 },
-                cargarMapa: function () {
+                
+                cargarMapa: function () {//esta función nos carga los elementos de nuestrp tetris
                     var canvas = document.getElementById("espai");
                     var ctx = canvas.getContext("2d");
                     this.mostrarInfo();
@@ -88,7 +86,7 @@ and open the template in the editor.
 
                     for (var i = 0; i < this.mapa.length; i++) {
                         for (var j = 0; j < this.mapa[i].length; j++) {
-                            if (this.mapa[i][j] == 0) {
+                            if (this.mapa[i][j] == 0) {//dependiendo de lo que encuentre en el array pintaré una imagen u otra
                                 imagen = document.getElementById("blanco");
                             }
                             if (this.mapa[i][j] == 'B') {
@@ -124,20 +122,21 @@ and open the template in the editor.
 
 
                 },
-                cargarPiezaSiguiente: function () {
+                
+                cargarPiezaSiguiente: function () {//función que carga el canvas de la pieza siguiente
                     var canvasPiezaSiguiente = document.getElementById("piezaSiguiente");
                     var ctx2 = canvasPiezaSiguiente.getContext("2d");
                     var foto;
 
-                    var forma = this.piezaSiguiente.formaYcolor[0];
-                    var color = this.piezaSiguiente.formaYcolor[1];
+                    var forma = this.piezaSiguiente.formaYcolor[0];//guardamos la forma
+                    var color = this.piezaSiguiente.formaYcolor[1];//guardamos el color
 
-                    document.getElementById("pieza").innerHTML = "<h4>PIEZA SIGUIENTE</h4>";
+                    document.getElementById("pieza").innerHTML = "<h4>PIEZA SIGUIENTE</h4>";//colocamos un título informativo
 
                     for (var i = 0; i < forma.length; i++) {
                         for (var j = 0; j < forma[i].length; j++) {
-                            if (forma[i][j] == 1) {
-                                switch (color) {
+                            if (forma[i][j] == 1) {//si encuentra un uno, es que hay pieza y por lo tanto pinta
+                                switch (color) {//en función del color de la pieza pintara una imagen u otra
                                     case 'azul':
                                         foto = document.getElementById("azul");
                                         break;
@@ -161,37 +160,40 @@ and open the template in the editor.
                                         break;
                                 }
                                 ctx2.drawImage(foto, j * 30, i * 30, 30, 30);
-                            } else {
+                            } else {//si no encuentra un uno pinta el fondo
                                 foto = document.getElementById("blanco");
                                 ctx2.drawImage(foto, j * 30, i * 30, 30, 30);
                             }
                         }
                     }
                 },
-                iniciarMapa: function () {
-                    for (var i = 0; i < 25; i++) {
+                
+                iniciarMapa: function () {//iniciamos la variable mapa
+                    for (var i = 0; i < 25; i++) {//las G son paredes que he utilizado para detectar colisiones
                         this.mapa.push(['G', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'G']);
                     }
                     this.mapa.push(['G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G', 'G']);
                 },
-                mostrarInfo: function () {
-                    if (Juego.gameOver() == 0) {
+                
+                mostrarInfo: function () {//mostramos la información, puntuación,título...
+                    if (Juego.gameOver() == 0) {//Si hemos perdido nos mostrará lo siguiente
                         document.getElementById("titulo").innerHTML = "<h1>GAME OVER! </h1>";
                         document.getElementById("puntuacion").innerHTML = "Refresca para volver a jugar ";
                         document.getElementById("puntuacionMax").innerHTML = "PUNTUACIÓN " + this.puntuacion;
-                    } else {
+                    } else {//si aún no hemos perdido nos muestra lo siguiente
                         document.getElementById("titulo").innerHTML = "<h1>TETRIS</h1>";
                         document.getElementById("puntuacion").innerHTML = "Puntuación: " + this.puntuacion;
                         document.getElementById("puntuacionMax").innerHTML = "Puntuación máxima: " + this.puntuacionMaxima;
                     }
 
                 },
-                calcularPiezaSiguiente: function () {
+                
+                calcularPiezaSiguiente: function () {//función que nos calculará aleatoriamente una pieza
                     var pieza = Math.floor(Math.random() * (8 - 1) + 1);
                     switch (pieza) {
                         case 1:
-                            pieza = new Pieza([[[0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 0, 0], [0, 0, 0, 0]], "amarillo"], 4, 0);
-                            this.contadorPiezas['I']++;
+                            pieza = new Pieza([[[0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 0, 0], [0, 0, 0, 0]], "amarillo"], 4, 0);//primer array forma y color, después posiciones
+                            this.contadorPiezas['I']++;//aumentamos el contador de piezas
                             break;
                         case 2:
                             pieza = new Pieza([[[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 0, 0]], "lila"], 4, 0);
@@ -218,71 +220,60 @@ and open the template in the editor.
                             this.contadorPiezas['Z']++;
                             break;
                     }
-                    return pieza;
+                    return pieza;//devolvemos la pieza generada
                 },
-                interaccionUsuario: function (e) {
-                    if (e.code == "ArrowLeft") {
-                        if (Juego.piezaActual.moverIzquierda() == true) {
+                
+                interaccionUsuario: function (e) {//método que detecta las teclas que pulsa el usuario 
+                    if (e.code == "ArrowLeft") {//si pulsa izquierda
+                        if (Juego.piezaActual.moverIzquierda() == true) {//si se puede mover la movemos
                             Juego.piezaActual.horizontal--;
                         }
                     }
-                    if (e.code == "ArrowRight") {
+                    if (e.code == "ArrowRight") {//si pulsa derecha
 
-                        if (Juego.piezaActual.moverDerecha() == true) {
+                        if (Juego.piezaActual.moverDerecha() == true) {//si se puede mover la movemos
                             Juego.piezaActual.horizontal++;
                         }
                     }
-                    if (e.code == "ArrowUp") {
+                    if (e.code == "ArrowUp") {//si pulsa arriba rotamos izquierda
                         Juego.piezaActual.rotarIzquierda();
                     }
-                    if (e.code == "ArrowDown") {
+                    if (e.code == "ArrowDown") {//si pulsa abajo rotamos derecha
                         Juego.piezaActual.rotarDerecha();
                     }
                 },
-                comprobarLineas: function () {
-                    var contador;
+                
+                comprobarLineas: function () {//comprueba si hay lineas completas
+                    var contador;//hacemos un contador
                     var vertical;
                     for (vertical = 0; vertical < Juego.mapa.length; vertical++) {
                         for (var horizontal = 0; horizontal < Juego.mapa[vertical].length; horizontal++) {
-                            if (Juego.mapa[vertical][horizontal] == 'P') {
+                            if (Juego.mapa[vertical][horizontal] == 'P') {//si encuentra una negra sumamos contador
                                 contador++;
-                                if (contador >= 10) {
-                                    Juego.mapa = Juego.mapa.slice(0);
-                                    Juego.mapa.splice(vertical, 1);
-                                    Juego.mapa.unshift(['G', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'G']);
-                                    Juego.puntuacion = Juego.puntuacion + 100;
-                                    Juego.comprobarPuntuacion();
+                                if (contador >= 10) {//si el contador llega a 10
+                                    Juego.mapa = Juego.mapa.slice(0);//hacemos copia
+                                    Juego.mapa.splice(vertical, 1);//eliminamos la fila con el índice vertical que lo cogemos del mismo bucle
+                                    Juego.mapa.unshift(['G', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'G']);//añadimos un afila limpia por arriba
+                                    Juego.puntuacion = Juego.puntuacion + 100;//sumamos 100 a la puntuación
+                                    Juego.comprobarPuntuacion();//método que comprueba la puntuación máxima
                                 }
                             } else {
-                                contador = 0;
+                                contador = 0;//si encuentra una que no es negra ponemos el contador a 0 ya que tienen que ser 10 veces seguidas
                             }
                         }
                     }
 
                 },
-                contarPiezas: function () {
-                    var total;
-                    var contador = 4;
-
-                    total = this.contadorPiezas['I'] + this.contadorPiezas['J'] + this.contadorPiezas['S'] +
-                            this.contadorPiezas['L'] + this.contadorPiezas['O'] + this.contadorPiezas['T'] +
-                            this.contadorPiezas['Z'];
-
-                    if (total == contador) {
-                        Juego.intervaloTiempo = 20;
-                    }
-                    console.log(Juego.intervaloTiempo);
-
-                },
-                comprobarPuntuacion: function () {
+                
+                comprobarPuntuacion: function () {//comprueba si la puntuación es superior a la máxima
                     if (Juego.puntuacion >= Juego.puntuacionMaxima) {
-                        Juego.puntuacionMaxima = Juego.puntuacion;
+                        Juego.puntuacionMaxima = Juego.puntuacion;//si lo es actualiza
                     }
                 },
-                gameOver: function () {
+                gameOver: function () {//comprueba si la fila superior tiene alguna negra
                     var gameover = 1;
-                    var array = Juego.mapa[0];
-                    if (array[1] == 'P') {
+                    var array = Juego.mapa[0];//se que lo suyo sería hacerlo con un for recorriendo la fila, pero no se por qué de esa forma no me funcionaba
+                    if (array[1] == 'P') {//si es negra gameOver=0;
                         gameover = 0;
                     }
                     if (array[2] == 'P') {
@@ -313,37 +304,35 @@ and open the template in the editor.
                         gameover = 0;
                     }
 
-                    return gameover;
+                    return gameover;//retornamos la variable
                 },
                 movimiento: function () {
                     window.onload = function () {
-                        window.onscroll
-                        Juego.iniciarMapa();
-                        Juego.cargarMapa();
-                        Juego.piezaActual = Juego.calcularPiezaSiguiente();
-                        Juego.piezaSiguiente = Juego.calcularPiezaSiguiente();
-                        var element = document.getElementById("all");
-                        var interval = setInterval(function () {
-                            if (Juego.gameOver() == 0) {
+                        Juego.iniciarMapa();//iniciamos la variable mapa
+                        Juego.cargarMapa();//mostramos por pantalla
+                        Juego.piezaActual = Juego.calcularPiezaSiguiente();//generamos la pieza actual
+                        Juego.piezaSiguiente = Juego.calcularPiezaSiguiente();//generamos la pieza siguiente
+                        var element = document.getElementById("all");//lo utilizamos para captar eventos
+                        var interval = setInterval(function () {//función a repetir
+                            if (Juego.gameOver() == 0) {//si perdemos dejamos de ejecutar el intervalo
                                 clearInterval(interval);
                             }
-                            Juego.cargarPiezaSiguiente();
-                            element.addEventListener("keydown", Juego.interaccionUsuario);
-                            Juego.comprobarLineas();
-                            Juego.piezaActual.pintaPieza();
-                            Juego.borrarCanvas();
-                            Juego.cargarMapa();
+                            Juego.cargarPiezaSiguiente();//mostramos el canvas de la pieza siguiente
+                            element.addEventListener("keydown", Juego.interaccionUsuario);//capturamos teclas
+                            Juego.comprobarLineas();//comprobamos si hay lineas completas
+                            Juego.piezaActual.pintaPieza();//pintamos la pieza
+                            Juego.borrarCanvas();//borramos canvas
+                            Juego.cargarMapa();//volvermos a mostrar el canvas ya con la pieza
                             Juego.piezaActual.baja = Juego.piezaActual.puedeBajar();
-                            if (Juego.piezaActual.baja == true) {
+                            if (Juego.piezaActual.baja == true) {//si la pieza puede bajar la bajamos
                                 Juego.piezaActual.bajaPieza();
-                            } else {
-                                Juego.piezaActual.formaYcolor[1] = 'negro';
-                                Juego.piezaActual.pintaPieza();
-                                Juego.puntuacion = Juego.puntuacion + 10;
-                                Juego.comprobarPuntuacion();
-                                Juego.piezaActual = Juego.piezaSiguiente;
-                                Juego.contarPiezas();
-                                Juego.piezaSiguiente = Juego.calcularPiezaSiguiente();
+                            } else {//si la pieza no puede bajar
+                                Juego.piezaActual.formaYcolor[1] = 'negro';//le ponemos el color a negro
+                                Juego.piezaActual.pintaPieza();//y la pintamos, por lo tanto se pintara de negro
+                                Juego.puntuacion = Juego.puntuacion + 10;//cada vez que baja una pieza sumamos puntuación
+                                Juego.comprobarPuntuacion();//comprobamos con la máxima
+                                Juego.piezaActual = Juego.piezaSiguiente;//la pieza siguiente pasa a ser la actual
+                                Juego.piezaSiguiente = Juego.calcularPiezaSiguiente();//calculamos la pieza siguiente
                             }
                         }, Juego.intervaloTiempo);
 
@@ -352,22 +341,22 @@ and open the template in the editor.
 
             };
 
-            var Pieza = function (formaYcolor, horizontal, vertical) {
+            var Pieza = function (formaYcolor, horizontal, vertical) {//objeto pieza
                 this.formaYcolor = formaYcolor;
                 this.horizontal = horizontal;
                 this.vertical = vertical;
                 this.baja = true;
             };
 
-            Pieza.prototype.rotarIzquierda = function () {
-                if (Juego.piezaActual.formaYcolor[1] != 'amarillo') {
-                    Juego.piezaActual.rotarDerecha();
+            Pieza.prototype.rotarIzquierda = function () {//método que rota a la izquierda
+                if (Juego.piezaActual.formaYcolor[1] != 'amarillo') {//la pieza amarilla no es necesario rotarla ya que es la o por lo tanto si es esta no rotamos
+                    Juego.piezaActual.rotarDerecha();//para la izquierda rotamos tres veces a la derecha
                     Juego.piezaActual.rotarDerecha();
                     Juego.piezaActual.rotarDerecha();
                 }
             };
 
-            Pieza.prototype.rotarDerecha = function () {
+            Pieza.prototype.rotarDerecha = function () {//método que rota a la derecha
                 if (Juego.piezaActual.formaYcolor[1] != 'amarillo') {
                     var forma = Juego.piezaActual.formaYcolor[0];
                     var formaNova = new Array();
@@ -378,23 +367,23 @@ and open the template in the editor.
                             formaNova[i][j] = forma[forma[i].length - 1 - j][i];
                         }
                     }
-                    for (var vertical = 0; vertical < formaNova.length; vertical++) {
+                    for (var vertical = 0; vertical < formaNova.length; vertical++) {//comprobamos si alguna posición queda fuera de el espacio disponible
                         for (var horizontal = 0; horizontal < formaNova[vertical].length; horizontal++) {
                             if (formaNova[vertical][horizontal] == 1) {
-                                if (Juego.mapa[Juego.piezaActual.vertical + vertical][Juego.piezaActual.horizontal + horizontal] != 0) {
+                                if (Juego.mapa[Juego.piezaActual.vertical + vertical][Juego.piezaActual.horizontal + horizontal] != 0) {//si hay alguna posición fuera la variable pasa a ser false
                                     puede = false;
                                 }
                             }
                         }
                     }
-                    if (puede == true) {
+                    if (puede == true) {//si la variable esta true la rotamos
                         Juego.piezaActual.formaYcolor[0] = formaNova;
                     }
                 }
             };
 
-            Pieza.prototype.moverIzquierda = function () {
-                var forma = Juego.piezaActual.formaYcolor[0];
+            Pieza.prototype.moverIzquierda = function () {//método que mueve a la izquierda
+                var forma = Juego.piezaActual.formaYcolor[0];//forma
                 var vertical = Juego.piezaActual.vertical;
                 var horizontal = Juego.piezaActual.horizontal;
                 var puede = true;
@@ -403,7 +392,7 @@ and open the template in the editor.
                     for (var j = 0; j < forma[i].length; j++) {
                         if (forma[i][j] == 1) {
                             if ((Juego.mapa[vertical + i][horizontal + j - 1] == 'G') || (Juego.mapa[vertical + i][horizontal + j - 1] == 'G')
-                                    || (Juego.mapa[vertical + i][horizontal + j + 1] == 'P')) {
+                                    || (Juego.mapa[vertical + i][horizontal + j + 1] == 'P')) {// si alguna posición toca con una pared o con otra pieza no puede moverse por lo tanto false
                                 puede = false;
                             } else {
                             }
@@ -411,9 +400,10 @@ and open the template in the editor.
                     }
                 }
 
-                return puede;
+                return puede;//retornamos que no puede moverse
             };
-            Pieza.prototype.moverDerecha = function () {
+            
+            Pieza.prototype.moverDerecha = function () {//mover a la derecha, funciona igual que el de mover a la izquierda
                 var forma = Juego.piezaActual.formaYcolor[0];
                 var vertical = Juego.piezaActual.vertical;
                 var horizontal = Juego.piezaActual.horizontal;
@@ -436,18 +426,18 @@ and open the template in the editor.
 
             };
 
-            Pieza.prototype.retornarForma = function () {
+            Pieza.prototype.retornarForma = function () {//método que devuelve la forma de la pieza
                 return Juego.piezaActual.formaYcolor[0];
             };
 
-            Pieza.prototype.pintaPieza = function () {
+            Pieza.prototype.pintaPieza = function () {//método que pinta la pieza en el mapa
                 var forma = Juego.piezaActual.formaYcolor[0];
                 var vertical = Juego.piezaActual.vertical;
                 var horizontal = Juego.piezaActual.horizontal;
                 var color = Juego.piezaActual.formaYcolor[1];
                 for (var i = 0; i < forma.length; i++) {
                     for (var j = 0; j < forma[i].length; j++) {
-                        if (forma[i][j] == 1) {
+                        if (forma[i][j] == 1) {//en función del color pinta una cosa u otra
                             switch (color) {
                                 case 'amarillo':
                                     Juego.mapa[vertical + i][horizontal + j] = 'A';
@@ -480,7 +470,7 @@ and open the template in the editor.
                 }
             };
 
-            Pieza.prototype.borraPieza = function () {
+            Pieza.prototype.borraPieza = function () {//borramos la pieza para poder bajarña, es igual que pintar pieza pero poniendo 0 
                 var forma = Juego.piezaActual.formaYcolor[0];
                 var vertical = Juego.piezaActual.vertical;
                 var horizontal = Juego.piezaActual.horizontal;
@@ -493,13 +483,13 @@ and open the template in the editor.
                 }
             };
 
-            Pieza.prototype.bajaPieza = function () {
+            Pieza.prototype.bajaPieza = function () {//baja la pieza 
                 Juego.piezaActual.borraPieza();
-                Juego.piezaActual.vertical = Juego.piezaActual.vertical + 1;
+                Juego.piezaActual.vertical = Juego.piezaActual.vertical + 1;//le sumamos uno a la vertical
             };
 
-            Pieza.prototype.puedeBajar = function () {
-                var forma = Juego.piezaActual.formaYcolor[0];
+            Pieza.prototype.puedeBajar = function () {//comprueba si la pieza puede bajar
+                var forma = Juego.piezaActual.formaYcolor[0];//forma de la pieza
                 var vertical = Juego.piezaActual.vertical;
                 var horizontal = Juego.piezaActual.horizontal;
                 var puede = true;
@@ -508,7 +498,7 @@ and open the template in the editor.
                     for (var j = 0; j < forma[i].length; j++) {
                         if (forma[i][j] == 1) {
                             if ((Juego.mapa[vertical + i + 1][horizontal + j] == 'G')
-                                    || (Juego.mapa[vertical + i + 1][horizontal + j] == 'P')) {
+                                    || (Juego.mapa[vertical + i + 1][horizontal + j] == 'P')) {//si la posición de abajo de todas las posiciones de una pieza es pared o pieza no puede bajar más
                                 puede = false;
                             } else {
                             }
@@ -518,7 +508,7 @@ and open the template in the editor.
                 return puede;
             };
 
-            Juego.movimiento();
+            Juego.movimiento();//llamamos al método principal de la aplicación
 
 
         </script>
