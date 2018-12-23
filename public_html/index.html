@@ -8,14 +8,33 @@ and open the template in the editor.
     <head>
         <title>Tetris</title>
         <style type="text/css">
+            #titulo{
+                font-family: fantasy;
+                font-size: 1em;
+                color: wheat;
+            }
             #pieza{
-                margin-left: 350px;
-                 }
-            </style>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        </head>
-        <body id="all">
+                margin-left: 150px;
+                font-family: fantasy;
+                color:wheat;
+            }
+            body{
+                background-color: blueviolet;
+                text-align: center;
+            }
+            #puntuacion{
+                font-family: fantasy;
+                color:wheat;
+            }
+            #puntuacionMax{
+                font-family: fantasy;
+                color:wheat;
+            }
+        </style>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body id="all">
         <p id="titulo"></p>
         <p id="puntuacion"></p>
         <p id="puntuacionMax"></p>
@@ -109,7 +128,7 @@ and open the template in the editor.
                     var forma = this.piezaSiguiente.formaYcolor[0];
                     var color = this.piezaSiguiente.formaYcolor[1];
 
-                    document.getElementById("pieza").innerHTML = "<h4>Pieza Siguiente</h4>";
+                    document.getElementById("pieza").innerHTML = "<h4>PIEZA SIGUIENTE</h4>";
 
                     for (var i = 0; i < forma.length; i++) {
                         for (var j = 0; j < forma[i].length; j++) {
